@@ -1,13 +1,3 @@
-# Environments
-
-## Test
-
-|           | Url   |
-| ---           | ---   |
-| Public url    | https://clouddataprotection.francecentral.cloudapp.azure.com/                |
-| Backend       | https://clouddataprotectionbackend.francecentral.cloudapp.azure.com          |
-| Loadbalancer  | http://clouddataprotectiontestloadbalancer.francecentral.cloudapp.azure.com/  |
-
 # Services
 
 ## Kubernetes
@@ -19,13 +9,6 @@
 | BackupConfiguration   | backup-config-cluster-ip  | ❌        | 
 | Onboarding            | onboarding-cluster-ip     | ❌        |
 | Mail                  | none                      | ❌        |
-
-
-## Functions
-
-| Name | Location   |
-| ---  | ---        |
-| BackupDemo (test) | https://clouddataprotection-test-backupdemo.azurewebsites.net/api |
 
 # Secrets
 
