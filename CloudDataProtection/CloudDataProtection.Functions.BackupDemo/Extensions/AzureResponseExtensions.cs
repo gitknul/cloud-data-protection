@@ -2,7 +2,7 @@
 
 namespace CloudDataProtection.Functions.BackupDemo.Extensions
 {
-    public static class ResponseExtensions
+    public static class AzureResponseExtensions
     {
         public static bool IsSuccessStatusCode<T>(this Response<T> response)
         {

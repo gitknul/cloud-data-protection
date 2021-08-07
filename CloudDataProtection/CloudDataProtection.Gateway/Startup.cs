@@ -85,11 +85,8 @@ namespace CloudDataProtection
 
             services.AddHostedService<GetUserEmailRpcServer>();
             services.AddHostedService<UserDataDeletedMessageListener>();
-            
-            services.AddOcelot()
-                .AddDelegatingHandler<BackupDemoFileDownloadHandler>()
-                .AddDelegatingHandler<BackupDemoFileUploadHandler>()
-                .AddDelegatingHandler<BackupDemoFileInfoHandler>();
+
+            services.AddOcelot().AddDelegatingHandler<BackupDemoHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

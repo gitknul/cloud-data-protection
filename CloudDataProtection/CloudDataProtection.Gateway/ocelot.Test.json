@@ -83,7 +83,7 @@
       ],
       "UpstreamPathTemplate": "/demo/file",
       "UpstreamHttpMethod": [ "POST" ],
-      "DelegatingHandlers": ["BackupDemoFileUploadHandler"]
+      "DelegatingHandlers": ["BackupDemoHandler"]
     },
     {
       "DownstreamPathTemplate": "/api/FileInfo",
@@ -96,7 +96,20 @@
       ],
       "UpstreamPathTemplate": "/demo/file",
       "UpstreamHttpMethod": [ "GET" ],
-      "DelegatingHandlers": ["BackupDemoFileInfoHandler"]
+      "DelegatingHandlers": ["BackupDemoHandler"]
+    },
+    {
+      "DownstreamPathTemplate": "/api/FileDestination",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "clouddataprotection-test-backupdemo.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/demo/FileDestination",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DelegatingHandlers": ["BackupDemoHandler"]
     },
     {
       "DownstreamPathTemplate": "/api/FileDownload",
@@ -109,7 +122,7 @@
       ],
       "UpstreamPathTemplate": "/demo/file/download",
       "UpstreamHttpMethod": [ "GET" ],
-      "DelegatingHandlers": ["BackupDemoFileDownloadHandler"]
+      "DelegatingHandlers": ["BackupDemoHandler"]
     }
   ],
   "GlobalConfiguration": {

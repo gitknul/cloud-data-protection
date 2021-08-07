@@ -69,7 +69,7 @@ namespace CloudDataProtection.Core.Cryptography.Aes
                             if (input.CanSeek)
                             {
                                 buffer = new byte[Math.Min(DefaultBufferSize, input.Length)];
-                                input.Seek(0, SeekOrigin.Begin);
+                                input.Position = 0;
                             }
                             else
                             {

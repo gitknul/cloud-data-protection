@@ -1,4 +1,6 @@
 @import "typography.css";
+@import "colors.css";
+@import "skeletons.css";
 
 .app__wrapper {
   box-sizing: border-box;

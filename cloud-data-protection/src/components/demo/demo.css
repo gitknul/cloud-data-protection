@@ -46,3 +46,11 @@
         width: 100%!important;
     }
 }
+
+.backup-demo__sources {
+    margin-top: 1rem;
+}
+
+.backup-demo__upload__form__select-file {
+    margin-top: .5rem!important;
+}

@@ -7,17 +7,22 @@ namespace CloudDataProtection.Core.Environment
     {
         public static string GetEnvironmentVariable(string key)
         {
-            string environmentVariable =
-                System.Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Process) ??
-                System.Environment.GetEnvironmentVariable(key);
-
-            if (environmentVariable == null && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            string environmentVariable = null;
+            
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                // On Windows we can fallback to machine and user targets
                 environmentVariable = System.Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.User) ?? 
-                         System.Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
+                                      System.Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
             }
 
+            if (environmentVariable == null)
+            {
+                environmentVariable =
+                    System.Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Process) ??
+                    System.Environment.GetEnvironmentVariable(key);
+                
+            }
+            
             return environmentVariable;
         }
     }

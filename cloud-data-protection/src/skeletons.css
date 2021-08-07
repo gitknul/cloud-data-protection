@@ -1,0 +1,45 @@
+:root {
+    --skeleton-accent: #d3d3d3;
+    --skeleton-accent-light: #e8e8e8;
+    --skeleton-duration: 2.25s;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, var(--skeleton-accent) 0%, var(--skeleton-accent) 20%, var(--skeleton-accent-light) 40%, var(--skeleton-accent) 60%, var(--skeleton-accent) 80%);
+    background-size: 200%;
+    width: min(24rem, 100%);
+
+    animation: skeleton-lines var(--skeleton-duration) infinite linear;
+}
+
+.skeleton--checkbox {
+    height: 1.2rem;
+    margin: 1rem 0;
+    border-radius: 2px;
+}
+
+.skeleton--16 {
+    width: min(16rem, 100%);
+
+    animation: skeleton-lines-16 var(--skeleton-duration) infinite linear;
+}
+
+@keyframes skeleton-lines-16 {
+    0% {
+        background-position: -20rem;
+    }
+
+    40%, 100% {
+        background-position: 12rem;
+    }
+}
+
+@keyframes skeleton-lines-24 {
+    0% {
+        background-position: -30rem;
+    }
+
+    40%, 100% {
+        background-position: 18rem;
+    }
+}

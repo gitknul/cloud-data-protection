@@ -1,20 +1,30 @@
 version: "3.8"
 services:
-  cdp_messagebroker_dev:
+  cdp_rabbitmq:
     image: "rabbitmq:3-management"
     ports:
-      # Web interface
       - "7100:15672"
       - "7101:5672"
     volumes:
       - cdp_rabbitmq:/rabbitmq
-  cdp_developmentdb_dev:
+  cdp_postgres:
     image: "postgres"
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: postgresdevelopment
+  cdp_mongo:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mongodevelopment
+    volumes:
+      - cdp_mongodb:/data/db
 
 volumes:
   cdp_rabbitmq:
+    driver: local
+  cdp_mongodb:
     driver: local

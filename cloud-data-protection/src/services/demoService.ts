@@ -1,19 +1,23 @@
 import {ServiceBase} from "services/base/serviceBase";
 import {AxiosResponse, CancelToken} from "axios";
 import {http} from "common/http";
-import FileUploadResult from "services/result/demo/fileUploadResult";
-import FileInfoResult from "services/result/demo/fileInfoResult";
 import {FileDownloadResult} from "services/result/demo/fileDownloadResult";
+import {FileUploadResult} from "services/result/demo/fileUploadResult";
+import {FileInfoResult} from "services/result/demo/fileInfoResult";
 import {readFileName} from "common/parser/contentDisposition";
 import fileDownload from "js-file-download";
+import {FileSourceResult} from "services/result/demo/fileSourceResult";
+import FileUploadInput from "./input/demo/fileUploadInput";
 
 class DemoService extends ServiceBase {
+    /* 25 mb */
     public static readonly maxFileSize: number = 25 * 1024 * 1024;
 
-    public async upload(file: File, cancelToken?: CancelToken): Promise<FileUploadResult> {
+    public async upload(file: File, input: FileUploadInput, cancelToken?: CancelToken): Promise<FileUploadResult> {
         const formData = new FormData();
 
         formData.append('File', file);
+        formData.append('Input', JSON.stringify(input));
 
         return await http.post('/demo/file', formData, { cancelToken: cancelToken, headers: { 'content-type': 'multipart/form-data' } })
             .then((response: AxiosResponse<FileUploadResult>) => response.data)
@@ -26,32 +30,28 @@ class DemoService extends ServiceBase {
             .catch((e: any) => this.onError(e));
     }
 
-    public async downloadFile(id: string, decrypt: boolean, cancelToken?: CancelToken): Promise<FileDownloadResult | undefined> {
-        let headers;
-        let responseType;
-
-        if (decrypt) {
-            headers = { 'accept' : 'application/octet-stream'}
-            responseType = 'blob';
-        } else {
-            headers = { 'accept' : 'application/json'}
-            responseType = 'json';
-        }
-
-        return await http.get('/demo/file/download', { cancelToken: cancelToken, params: { id: id, decrypt: decrypt }, headers: headers, responseType: responseType })
-            .then((response: AxiosResponse) => {
-                if (DemoService.shouldDownload(response)) {
-                    fileDownload(response.data, readFileName(response.headers['content-disposition']), response.data.contentType);
-                    return Promise.resolve(undefined);
-                }
-
-                return response.data as FileDownloadResult;
-            })
+    public async getDestinations(cancelToken?: CancelToken): Promise<FileSourceResult> {
+            return await http.get('/demo/filedestination', { cancelToken: cancelToken })
+            .then((response: AxiosResponse<FileSourceResult>) => response.data)
             .catch((e: any) => this.onError(e));
     }
 
-    private static shouldDownload(response: AxiosResponse): boolean {
-        return response.headers['content-disposition'];
+    public async downloadFile(id: string, cancelToken?: CancelToken): Promise<FileDownloadResult> {
+        const headers = { 'accept' : 'application/octet-stream'}
+        const responseType = 'blob';
+
+        return await http.get('/demo/file/download', { cancelToken: cancelToken, params: { id: id }, headers: headers, responseType: responseType })
+            .then((response: AxiosResponse) => {
+                fileDownload(response.data, readFileName(response.headers['content-disposition']), response.data.contentType);
+
+                const result = {
+                    name: response.headers['x-file-name'],
+                    downloadedFrom: response.headers['x-file-downloaded-from'],
+                }
+
+                return Promise.resolve(result);
+            })
+            .catch((e: any) => this.onError(e));
     }
 }
 

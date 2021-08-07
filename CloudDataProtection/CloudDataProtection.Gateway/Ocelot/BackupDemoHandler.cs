@@ -5,11 +5,11 @@ using CloudDataProtection.Core.Environment;
 
 namespace CloudDataProtection.Ocelot
 {
-    public abstract class BackupDemoFileHandlerBase : DelegatingHandler
+    public class BackupDemoHandler : DelegatingHandler
     {
         private readonly string _functionsKey;
 
-        protected BackupDemoFileHandlerBase()
+        public BackupDemoHandler()
         {
             _functionsKey = EnvironmentVariableHelper.GetEnvironmentVariable("CDP_BACKUP_DEMO_FUNCTIONS_KEY");
         }

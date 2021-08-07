@@ -91,7 +91,7 @@
       ],
       "UpstreamPathTemplate": "/demo/file",
       "UpstreamHttpMethod": [ "POST" ],
-      "DelegatingHandlers": ["BackupDemoFileUploadHandler"],
+      "DelegatingHandlers": ["BackupDemoHandler"],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
@@ -108,7 +108,24 @@
       ],
       "UpstreamPathTemplate": "/demo/file",
       "UpstreamHttpMethod": [ "GET" ],
-      "DelegatingHandlers": ["BackupDemoFileInfoHandler"],
+      "DelegatingHandlers": ["BackupDemoHandler"],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "DownstreamPathTemplate": "/api/FileDestination",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7071
+        }
+      ],
+      "UpstreamPathTemplate": "/demo/FileDestination",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DelegatingHandlers": ["BackupDemoHandler"],
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
@@ -125,7 +142,7 @@
       ],
       "UpstreamPathTemplate": "/demo/file/download",
       "UpstreamHttpMethod": [ "GET" ],
-      "DelegatingHandlers": ["BackupDemoFileDownloadHandler"],
+      "DelegatingHandlers": ["BackupDemoHandler"],
       "DangerousAcceptAnyServerCertificateValidator": true
     }
   ],

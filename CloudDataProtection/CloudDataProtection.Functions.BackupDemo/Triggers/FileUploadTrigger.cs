@@ -5,8 +5,10 @@ using CloudDataProtection.Core.Result;
 using CloudDataProtection.Functions.BackupDemo.Authentication;
 using CloudDataProtection.Functions.BackupDemo.Business;
 using CloudDataProtection.Functions.BackupDemo.Entities;
+using CloudDataProtection.Functions.BackupDemo.Extensions;
 using CloudDataProtection.Functions.BackupDemo.Factory;
 using CloudDataProtection.Functions.BackupDemo.Triggers.Dto;
+using CloudDataProtection.Functions.BackupDemo.Triggers.Dto.Input;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -19,7 +21,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Triggers
     {
         [FunctionName("FileUpload")]
         public static async Task<IActionResult> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]
+            [HttpTrigger(AuthorizationLevel.Function, "post")]
             HttpRequest request, ILogger logger)
         {
             if (!request.HttpContext.IsAuthenticated())
@@ -29,21 +31,21 @@ namespace CloudDataProtection.Functions.BackupDemo.Triggers
 
             IFormFile file = request.Form.Files.FirstOrDefault();
 
-            if (file == null)
+            FileUploadInput input = request.FromFormData<FileUploadInput>("Input");
+            
+            if (file == null || input == null)
             { 
                 return new BadRequestResult();
             }
             
-            logger.LogInformation("Received request for file upload");
-
-            return await DoFileUpload(file);
+            return await DoFileUpload(file, input);
         }
 
-        private static async Task<IActionResult> DoFileUpload(IFormFile file)
+        private static async Task<IActionResult> DoFileUpload(IFormFile file, FileUploadInput input)
         {
             FileManagerLogic logic = FileManagerLogicFactory.Instance.GetLogic();
 
-            BusinessResult<File> result = await logic.Upload(file);
+            BusinessResult<File> result = await logic.Upload(file, input.Destinations);
 
             if (!result.Success || result.Data == null)
             {
@@ -52,7 +54,13 @@ namespace CloudDataProtection.Functions.BackupDemo.Triggers
 
             FileUploadResult dto = new FileUploadResult
             {
-                StorageId = result.Data.StorageId
+                Id = result.Data.Id.ToString(),
+                Bytes = result.Data.Bytes,
+                ContentType = result.Data.ContentType,
+                DisplayName = result.Data.DisplayName,
+                UploadedTo = result.Data.UploadedTo
+                    .Select(u => new FileUploadDestinationResultEntry(u))
+                    .ToList()
             };
             
             return new OkObjectResult(dto);
