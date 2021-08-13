@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CloudDataProtection.Core.Cryptography.Aes;
 using CloudDataProtection.Core.Result;
@@ -8,8 +9,6 @@ using CloudDataProtection.Functions.BackupDemo.Entities;
 using CloudDataProtection.Functions.BackupDemo.Extensions;
 using CloudDataProtection.Functions.BackupDemo.Repository;
 using CloudDataProtection.Functions.BackupDemo.Service;
-using CloudDataProtection.Functions.BackupDemo.Service.Amazon;
-using CloudDataProtection.Functions.BackupDemo.Service.Google;
 using CloudDataProtection.Functions.BackupDemo.Service.Result;
 using CloudDataProtection.Functions.BackupDemo.Triggers.Dto;
 using Microsoft.AspNetCore.Http;
@@ -20,31 +19,23 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
     public class FileManagerLogic
     {
         private readonly IDataTransformer _transformer;
-        
         private readonly IFileRepository _repository;
+        private readonly IEnumerable<IFileService> _fileServices;
 
-        private readonly IBlobStorageFileService _blobStorageFileService;
-        private readonly IS3FileService _s3FileService;
-        private readonly IGoogleCloudStorageFileService _googleCloudStorageFileService;
+        public IEnumerable<IFileService> FileServices => (IEnumerable<IFileService>) new [] {_fileServices};
 
-        private const int FilenameHashWorkFactor = 4;
-
-        public FileManagerLogic(IBlobStorageFileService blobStorageFileService, 
-            IS3FileService s3FileService,
-            IGoogleCloudStorageFileService googleCloudStorageFileService, 
+        public FileManagerLogic(IEnumerable<IFileService> fileServices, 
             IDataTransformer transformer,
             IFileRepository repository)
         {
-            _blobStorageFileService = blobStorageFileService;
-            _s3FileService = s3FileService;
-            _googleCloudStorageFileService = googleCloudStorageFileService;
+            _fileServices = fileServices;
             _transformer = transformer;
             _repository = repository;
         }
 
         public async Task<BusinessResult<File>> Upload(IFormFile input, ICollection<FileDestination> destinations)
         {
-            string fileName = GenerateFileName(input);
+            string fileName = GenerateFileName();
             
             using (Stream stream = _transformer.Encrypt(input.OpenReadStream()))
             {
@@ -57,7 +48,12 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
                 
                 foreach (FileDestination destination in destinations)
                 {
-                    IFileService service = ResolveFileService(destination);
+                    IFileService fileService = ResolveFileService(destination);
+
+                    if (fileService == null)
+                    {
+                        continue;
+                    }
 
                     FileDestinationInfo info = new FileDestinationInfo(destination);
 
@@ -67,7 +63,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
 
                         await stream.CopyToAndSeekAsync(copy);
 
-                        UploadFileResult fileResult = await service.Upload(copy, fileName);
+                        UploadFileResult fileResult = await fileService.Upload(copy, fileName);
 
                         info.UploadCompletedAt = DateTime.Now;
                         info.UploadSuccess = fileResult.Success;
@@ -127,7 +123,14 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
 
                 try
                 {
-                    Stream response = await ResolveFileService(info.Destination).GetDownloadStream(info.FileId);
+                    IFileService fileService = ResolveFileService(info.Destination);
+
+                    if (fileService == null)
+                    {
+                        continue;
+                    }
+                    
+                    Stream response = await fileService.GetDownloadStream(info.FileId);
                     
                     data = _transformer.Decrypt(response);
                 }
@@ -160,24 +163,14 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
             return BusinessResult<FileDownloadResult>.Ok(result);
         }
 
-        private string GenerateFileName(IFormFile input)
+        private string GenerateFileName()
         {
             return Path.GetRandomFileName().Split('.')[0];
         }
 
         private IFileService ResolveFileService(FileDestination destination)
         {
-            switch (destination)
-            {
-                case FileDestination.AmazonS3:
-                    return _s3FileService;
-                case FileDestination.AzureBlobStorage:
-                    return _blobStorageFileService;
-                case FileDestination.GoogleCloudStorage:
-                    return _googleCloudStorageFileService;
-                default:
-                    throw new ArgumentException(nameof(destination));
-            }
+            return _fileServices.FirstOrDefault(fs => fs.Destination == destination);
         }
     }
 }

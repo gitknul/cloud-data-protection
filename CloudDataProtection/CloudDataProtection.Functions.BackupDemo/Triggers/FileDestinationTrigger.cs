@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CloudDataProtection.Functions.BackupDemo.Authentication;
-using CloudDataProtection.Functions.BackupDemo.Entities;
+using CloudDataProtection.Functions.BackupDemo.Business;
 using CloudDataProtection.Functions.BackupDemo.Extensions;
+using CloudDataProtection.Functions.BackupDemo.Factory;
 using CloudDataProtection.Functions.BackupDemo.Triggers.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +25,11 @@ namespace CloudDataProtection.Functions.BackupDemo.Triggers
             {
                 return new UnauthorizedResult();
             }
+            
+            FileManagerLogic logic = FileManagerLogicFactory.Instance.GetLogic();
 
-            FileDestination[] destinations = Enum.GetValues(typeof(FileDestination)) as FileDestination[];
-
-            IEnumerable<FileDestinationResultEntry> sources = destinations
+            IEnumerable<FileDestinationResultEntry> sources = logic.FileServices
+                .Select(fs => fs.Destination)
                 .Select(d => new FileDestinationResultEntry((int) d, d.GetDescription()))
                 .OrderBy(d => d.Description);
 

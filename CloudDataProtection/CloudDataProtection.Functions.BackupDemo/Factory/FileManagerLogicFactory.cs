@@ -1,8 +1,10 @@
-﻿using CloudDataProtection.Core.Cryptography.Aes;
+﻿using System.Collections.Generic;
+using CloudDataProtection.Core.Cryptography.Aes;
 using CloudDataProtection.Core.Cryptography.Aes.Options;
 using CloudDataProtection.Core.Environment;
 using CloudDataProtection.Functions.BackupDemo.Business;
 using CloudDataProtection.Functions.BackupDemo.Context;
+using CloudDataProtection.Functions.BackupDemo.Extensions;
 using CloudDataProtection.Functions.BackupDemo.Repository;
 using CloudDataProtection.Functions.BackupDemo.Service;
 using CloudDataProtection.Functions.BackupDemo.Service.Amazon;
@@ -36,14 +38,15 @@ namespace CloudDataProtection.Functions.BackupDemo.Factory
             };
 
             IFileContext context = new MongoDbFileContext(mongoDbOptions);
-            
-            IBlobStorageFileService blobStorageFileService = new BlobStorageFileService();
-            IS3FileService s3FileService = new S3FileService();
-            IGoogleCloudStorageFileService googleCloudStorageFileService = new GoogleCloudStorageFileService();
             IFileRepository repository = new FileRepository(context);
 
-            return new FileManagerLogic
-                (blobStorageFileService, s3FileService, googleCloudStorageFileService, transformer, repository);
+            ICollection<IFileService> fileServices = new List<IFileService>();
+            
+            fileServices.AddIf(() => new BlobStorageFileService(), BlobStorageFileService.IsEnabled);
+            fileServices.AddIf(() => new S3FileService(), S3FileService.IsEnabled);
+            fileServices.AddIf(() => new GoogleCloudStorageFileService(), GoogleCloudStorageFileService.IsEnabled);
+
+            return new FileManagerLogic(fileServices, transformer, repository);
         }
     }
 }

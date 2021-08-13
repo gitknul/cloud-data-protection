@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using CloudDataProtection.Core.Environment;
+using CloudDataProtection.Functions.BackupDemo.Entities;
 using CloudDataProtection.Functions.BackupDemo.Service.Result;
 using Google;
 using Google.Apis.Auth.OAuth2;
@@ -17,6 +18,20 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Google
         private string JsonPath => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_GCS_JSON");
 
         private static readonly string BucketName = "cdp-demo-storage";
+                
+        public static bool IsEnabled
+        {
+            get
+            {
+                string environmentValue = EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_GCS_DISABLE")?.ToLower();
+
+                bool disabled = environmentValue == "1" || environmentValue == "true";
+
+                return !disabled;
+            }
+        }
+
+        public FileDestination Destination => FileDestination.GoogleCloudStorage;
 
         public async Task<UploadFileResult> Upload(Stream stream, string uploadFileName)
         {

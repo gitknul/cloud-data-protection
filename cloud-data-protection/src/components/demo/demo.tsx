@@ -233,15 +233,19 @@ const Demo = () => {
                     </div>
 
                     <FormGroup className='backup-demo__sources'>
-                        <FormLabel component='legend'>Backup destination</FormLabel>
-                        {sources ? sources.sources.map((s) =>
+                        <FormLabel component='legend'>File destination</FormLabel>
+                        {sources && sources.sources.length ? sources.sources.map((s) =>
                             <FormControlLabel
                                 control={<Checkbox checked={isDestinationChecked(s)} name={s.fileDestination.toString()} />}
                                 onChange={onDestinationChange}
                                 label={s.description}
                                 key={s.fileDestination.toString()}
                             />
-                        ) :
+                        ) : sources && sources.sources.length === 0 ?
+                            <p>
+                                No file destinations have been enabled
+                            </p>
+                            :
                             <div>
                                 <div className='skeleton skeleton--checkbox skeleton--16' />
                                 <div className='skeleton skeleton--checkbox skeleton--16' />

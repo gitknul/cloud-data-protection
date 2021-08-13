@@ -6,6 +6,7 @@ using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 using CloudDataProtection.Core.Environment;
+using CloudDataProtection.Functions.BackupDemo.Entities;
 using CloudDataProtection.Functions.BackupDemo.Extensions;
 using CloudDataProtection.Functions.BackupDemo.Service.Result;
 
@@ -17,6 +18,20 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Amazon
         private static string AccessSecret => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_AWS_SECRET");
 
         private static readonly string BucketName = "cdp-demo-s3";
+
+        public static bool IsEnabled
+        {
+            get
+            {
+                string environmentValue = EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_AWS_DISABLE")?.ToLower();
+
+                bool disabled = environmentValue == "1" || environmentValue == "true";
+
+                return !disabled;
+            }
+        }
+
+        public FileDestination Destination => FileDestination.AmazonS3;
 
         public async Task<UploadFileResult> Upload(Stream stream, string uploadFileName)
         {
