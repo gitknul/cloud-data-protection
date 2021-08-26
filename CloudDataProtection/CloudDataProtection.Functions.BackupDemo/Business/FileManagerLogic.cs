@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
         private readonly IFileRepository _repository;
         private readonly IEnumerable<IFileService> _fileServices;
 
-        public IEnumerable<IFileService> FileServices => (IEnumerable<IFileService>) new [] {_fileServices};
+        public IEnumerable<IFileService> FileServices => _fileServices.ToImmutableList();
 
         public FileManagerLogic(IEnumerable<IFileService> fileServices, 
             IDataTransformer transformer,
