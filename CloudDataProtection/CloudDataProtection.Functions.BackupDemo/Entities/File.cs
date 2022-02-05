@@ -14,7 +14,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Entities
         
         public string ContentType { get; set; }
 
-        public List<FileDestinationInfo> UploadedTo { get; set; } = new List<FileDestinationInfo>(1);
+        public List<FileDestinationInfo> UploadedTo { get; set; } = new(1);
 
         public bool IsUploaded => UploadedTo.Any(u => u.UploadSuccess);
 

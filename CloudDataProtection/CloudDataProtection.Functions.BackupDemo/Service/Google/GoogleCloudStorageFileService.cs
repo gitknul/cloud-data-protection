@@ -12,24 +12,12 @@ using Object = Google.Apis.Storage.v1.Data.Object;
 
 namespace CloudDataProtection.Functions.BackupDemo.Service.Google
 {
-    public class GoogleCloudStorageFileService : IGoogleCloudStorageFileService
+    public class GoogleCloudStorageFileService : IFileService
     {
-        private string ProjectId => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_GCS_PROJECT_ID");
-        private string JsonPath => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_GCS_JSON");
+        private string ProjectId => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_BACKUP_DEMO_GCS_PROJECT_ID");
+        private string JsonPath => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_BACKUP_DEMO_GCS_JSON_FILE");
 
         private static readonly string BucketName = "cdp-demo-storage";
-                
-        public static bool IsEnabled
-        {
-            get
-            {
-                string environmentValue = EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_GCS_DISABLE")?.ToLower();
-
-                bool disabled = environmentValue == "1" || environmentValue == "true";
-
-                return !disabled;
-            }
-        }
 
         public FileDestination Destination => FileDestination.GoogleCloudStorage;
 
@@ -57,7 +45,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Google
 
                 Stream destination = new MemoryStream();
 
-                DownloadObjectOptions options = new DownloadObjectOptions
+                DownloadObjectOptions options = new()
                 {
                     DownloadValidationMode = DownloadValidationMode.Always
                 };
@@ -91,7 +79,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Google
             }
             catch (GoogleApiException e)
             {
-                Bucket newBucket = new Bucket
+                Bucket newBucket = new()
                 {
                     Name = BucketName,
                     StorageClass = StorageClasses.Standard

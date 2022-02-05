@@ -19,12 +19,12 @@ spec:
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Test"
-            - name: CDP_DEV_ONBOARDING_GOOGLE_OAUTH2_CLIENT_ID
+            - name: CDP_ONBOARDING_GOOGLE_OAUTH2_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: cdp-onboarding-google-oauth2-client-id
                   key: value
-            - name: CDP_DEV_ONBOARDING_GOOGLE_OAUTH2_CLIENT_SECRET
+            - name: CDP_ONBOARDING_GOOGLE_OAUTH2_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: cdp-onboarding-google-oauth2-client-secret

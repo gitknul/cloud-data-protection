@@ -350,3 +350,7 @@ MigrationBackup/
 
 # Jetbrains IDE
 **/.idea/
+
+# Local run configuration
+*.local.run.xml
+

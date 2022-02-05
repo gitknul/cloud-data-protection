@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace CloudDataProtection.Functions.BackupDemo.Triggers.Dto
+namespace CloudDataProtection.Functions.BackupDemo.Triggers.Dto.Result
 {
     public class FileDestinationResult
     {

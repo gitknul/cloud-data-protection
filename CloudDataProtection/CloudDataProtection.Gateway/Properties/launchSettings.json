@@ -5,7 +5,8 @@
       "launchBrowser": false,
       "applicationUrl": "https://localhost:5001",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CDP_GATEWAY_BACKUP_DEMO_API_KEY": "sKRNzXG/Il2f9nNr0g/G5cLlqO+79FmaRZ39NajjwjA="
       }
     }
   }

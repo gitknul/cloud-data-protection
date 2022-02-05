@@ -1,15 +1,32 @@
-# Docker
+# Cloud Data Protection backend
 
-Each runnable project has its own Dockerfile. An image can be built by running the following command, replacing project with the actual project you want to build.
+## Dependencies
 
-Run the build script from the root ASP .NET Core directory. This is the same as the location of this README.
+Run the following script to launch all the dependencies for the backend.
 
+```bash
+docker compose -f docker-compose.dev.yml up -d
 ```
-docker build . -f ./{project}/Dockerfile -t your_tag
+
+## Generating encryption and API keys
+
+Run the `CloudDataProtection.CI.KeyGenerator` project to generate AES256 and API keys:
+
+```bash
+dotnet run --project CloudDataProtection.CI.KeyGenerator
 ```
 
-Example for OnboardingService:
+## Services
 
-```
-docker build . -f ./CloudDataProtection.Services.OnboardingService/Dockerfile -t cdp_onboarding_service
-```
+- [Gateway](CloudDataProtection.Gateway/README.md)
+- [Mail](CloudDataProtection.Services.MailService/README.md)
+- [Backup configuration](CloudDataProtection.Services.BackupConfigurationService/README.md)
+- [Onboarding](CloudDataProtection.Services.OnboardingService/README.md)
+
+## Serverless services
+
+* [Backup demo](CloudDataProtection.Functions.BackupDemo/README.md)
+
+## Logging in
+
+A client account can be created by registering a new account. It is not possible yet to change the password of the default (employee) user.

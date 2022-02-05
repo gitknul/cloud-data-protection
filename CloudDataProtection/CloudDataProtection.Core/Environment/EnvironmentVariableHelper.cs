@@ -11,16 +11,14 @@ namespace CloudDataProtection.Core.Environment
             
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                environmentVariable = System.Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.User) ?? 
+                environmentVariable = System.Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Process) ?? 
+                                      System.Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.User) ??
                                       System.Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Machine);
             }
 
             if (environmentVariable == null)
             {
-                environmentVariable =
-                    System.Environment.GetEnvironmentVariable(key, EnvironmentVariableTarget.Process) ??
-                    System.Environment.GetEnvironmentVariable(key);
-                
+                environmentVariable = System.Environment.GetEnvironmentVariable(key);
             }
             
             return environmentVariable;

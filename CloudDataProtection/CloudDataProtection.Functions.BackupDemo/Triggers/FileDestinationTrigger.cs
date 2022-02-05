@@ -5,7 +5,7 @@ using CloudDataProtection.Functions.BackupDemo.Authentication;
 using CloudDataProtection.Functions.BackupDemo.Business;
 using CloudDataProtection.Functions.BackupDemo.Extensions;
 using CloudDataProtection.Functions.BackupDemo.Factory;
-using CloudDataProtection.Functions.BackupDemo.Triggers.Dto;
+using CloudDataProtection.Functions.BackupDemo.Triggers.Dto.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -33,7 +33,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Triggers
                 .Select(d => new FileDestinationResultEntry((int) d, d.GetDescription()))
                 .OrderBy(d => d.Description);
 
-            FileDestinationResult result = new FileDestinationResult
+            FileDestinationResult result = new()
             {
                 Sources = sources
             };

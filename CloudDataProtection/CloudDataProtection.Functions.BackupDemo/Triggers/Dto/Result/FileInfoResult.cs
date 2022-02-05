@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CloudDataProtection.Functions.BackupDemo.Entities;
 
-namespace CloudDataProtection.Functions.BackupDemo.Triggers.Dto
+namespace CloudDataProtection.Functions.BackupDemo.Triggers.Dto.Result
 {
     public class FileInfoResult
     {

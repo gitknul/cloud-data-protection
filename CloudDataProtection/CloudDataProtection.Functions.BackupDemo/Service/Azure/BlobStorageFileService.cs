@@ -11,23 +11,11 @@ using CloudDataProtection.Functions.BackupDemo.Service.Result;
 
 namespace CloudDataProtection.Functions.BackupDemo.Service.Azure
 {
-    public class BlobStorageFileService : IBlobStorageFileService
+    public class BlobStorageFileService : IFileService
     {
-        private static string ConnectionString => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_BLOB_STORAGE");
+        private string ConnectionString => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_BACKUP_DEMO_BLOB_STORAGE_CONNECTION");
 
-        private static readonly string ContainerName = "cdp-demo-blobstorage";
-        
-        public static bool IsEnabled
-        {
-            get
-            {
-                string environmentValue = EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_BLOB_DISABLE")?.ToLower();
-
-                bool disabled = environmentValue == "1" || environmentValue == "true";
-
-                return !disabled;
-            }
-        }
+        private readonly string _containerName = "cdp-demo-blobstorage";
 
         public FileDestination Destination => FileDestination.AzureBlobStorage;
 
@@ -39,12 +27,9 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Azure
 
                 Response<BlobContentInfo> response = await blobClient.UploadAsync(stream);
 
-                if (!response.IsSuccessStatusCode())
-                {
-                    return UploadFileResult.Error();
-                }
-
-                return UploadFileResult.Ok(uploadFileName);
+                return !response.IsSuccessStatusCode() 
+                    ? UploadFileResult.Error() 
+                    : UploadFileResult.Ok(uploadFileName);
             }
             catch (Exception e)
             {
@@ -70,9 +55,9 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Azure
 
         private async Task<BlobClient> GetBlobClient(string id)
         {
-            BlobServiceClient client = new BlobServiceClient(ConnectionString);
+            BlobServiceClient client = new(ConnectionString);
 
-            BlobContainerClient containerClient = client.GetBlobContainerClient(ContainerName);
+            BlobContainerClient containerClient = client.GetBlobContainerClient(_containerName);
 
             await containerClient.CreateIfNotExistsAsync();
 

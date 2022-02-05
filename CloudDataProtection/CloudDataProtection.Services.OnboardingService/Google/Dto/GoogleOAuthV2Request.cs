@@ -4,6 +4,7 @@ namespace CloudDataProtection.Services.Onboarding.Google.Dto
 {
     public class GoogleOAuthV2Request
     {
+        // TODO Use JsonProperty to use correct naming
         public string code { get; set; }
         
         public string client_id { get; set; }

@@ -11,7 +11,7 @@ namespace CloudDataProtection.Ocelot
 
         public BackupDemoHandler()
         {
-            _functionsKey = EnvironmentVariableHelper.GetEnvironmentVariable("CDP_BACKUP_DEMO_FUNCTIONS_KEY");
+            _functionsKey = EnvironmentVariableHelper.GetEnvironmentVariable("CDP_GATEWAY_BACKUP_DEMO_API_KEY");
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

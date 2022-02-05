@@ -18,12 +18,12 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Result
 
         public static UploadFileResult Ok(string id)
         {
-            return new UploadFileResult(true, id);
+            return new(true, id);
         }
 
         public static UploadFileResult Error()
         {
-            return new UploadFileResult(false);
+            return new(false);
         }
     }
 }

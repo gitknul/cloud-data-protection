@@ -21,12 +21,12 @@ spec:
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Test"
-            - name: CDP_DEV_SENDGRID
+            - name: CDP_SG_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: cdp-sendgrid
                   key: value
-            - name: CDP_DEV_SENDGRID_SENDER
+            - name: CDP_SG_API_SENDER
               valueFrom:
                 secretKeyRef:
                   name: cdp-sendgrid-sender

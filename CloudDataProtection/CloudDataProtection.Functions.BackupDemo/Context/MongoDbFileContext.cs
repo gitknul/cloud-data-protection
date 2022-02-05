@@ -31,7 +31,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Context
         private IMongoCollection<File> _collection;
         private IMongoCollection<File> Collection => _collection ??= Database.GetCollection<File>("File", Settings);
 
-        private MongoCollectionSettings Settings => new MongoCollectionSettings
+        private MongoCollectionSettings Settings => new()
         {
             AssignIdOnInsert = false
         };

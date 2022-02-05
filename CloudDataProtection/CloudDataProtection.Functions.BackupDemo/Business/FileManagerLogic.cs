@@ -11,7 +11,7 @@ using CloudDataProtection.Functions.BackupDemo.Extensions;
 using CloudDataProtection.Functions.BackupDemo.Repository;
 using CloudDataProtection.Functions.BackupDemo.Service;
 using CloudDataProtection.Functions.BackupDemo.Service.Result;
-using CloudDataProtection.Functions.BackupDemo.Triggers.Dto;
+using CloudDataProtection.Functions.BackupDemo.Triggers.Dto.Result;
 using Microsoft.AspNetCore.Http;
 using File = CloudDataProtection.Functions.BackupDemo.Entities.File;
 
@@ -40,7 +40,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
             
             using (Stream stream = _transformer.Encrypt(input.OpenReadStream()))
             {
-                File file = new File
+                File file = new()
                 {
                     ContentType = input.ContentType,
                     DisplayName = input.FileName,
@@ -56,11 +56,11 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
                         continue;
                     }
 
-                    FileDestinationInfo info = new FileDestinationInfo(destination);
+                    FileDestinationInfo info = new(destination);
 
                     try
                     {
-                        MemoryStream copy = new MemoryStream();
+                        MemoryStream copy = new();
 
                         await stream.CopyToAndSeekAsync(copy);
 
@@ -115,7 +115,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
         private async Task<BusinessResult<FileDownloadResult>> Download(File file)
         {
             bool downloaded = false;
-            byte[] data = new byte[0];
+            byte[] data = Array.Empty<byte>();
             FileDestination? downloadedFrom = null;
 
             for (int i = 0; i < file.UploadedTo.Count && !downloaded; i++)
@@ -153,7 +153,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
                 return BusinessResult<FileDownloadResult>.Error("An unknown error occured while attempting to download the file");
             }
             
-            FileDownloadResult result = new FileDownloadResult
+            FileDownloadResult result = new()
             {
                 Bytes = data,
                 FileName = file.DisplayName,

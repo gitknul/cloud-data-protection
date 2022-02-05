@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDataProtection.Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDataProtection.Functions.BackupDemo", "CloudDataProtection.Functions.BackupDemo\CloudDataProtection.Functions.BackupDemo.csproj", "{D86C9823-47E3-4CFA-B1C2-0293B4BCD39C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDataProtection.CI.KeyGenerator", "CloudDataProtection.CI.KeyGenerator\CloudDataProtection.CI.KeyGenerator.csproj", "{B80A698D-8036-45B8-ADF4-0A04046E3C60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +74,9 @@ Global
 		{D86C9823-47E3-4CFA-B1C2-0293B4BCD39C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D86C9823-47E3-4CFA-B1C2-0293B4BCD39C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D86C9823-47E3-4CFA-B1C2-0293B4BCD39C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B80A698D-8036-45B8-ADF4-0A04046E3C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B80A698D-8036-45B8-ADF4-0A04046E3C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B80A698D-8036-45B8-ADF4-0A04046E3C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B80A698D-8036-45B8-ADF4-0A04046E3C60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

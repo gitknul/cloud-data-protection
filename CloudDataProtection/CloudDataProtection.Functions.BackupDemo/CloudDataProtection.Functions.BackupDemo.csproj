@@ -3,6 +3,7 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <AzureFunctionsVersion>V3</AzureFunctionsVersion>
         <Company>Olivier Bouchoms</Company>
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="AWSSDK.S3" Version="3.7.1.19" />
@@ -23,5 +24,15 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\CloudDataProtection.Core\CloudDataProtection.Core.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="appsettings.json" />
+      <EmbeddedResource Include="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="appsettings.Development.json" />
+      <EmbeddedResource Include="appsettings.Development.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 </Project>

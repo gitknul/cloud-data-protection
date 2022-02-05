@@ -12,24 +12,12 @@ using CloudDataProtection.Functions.BackupDemo.Service.Result;
 
 namespace CloudDataProtection.Functions.BackupDemo.Service.Amazon
 {
-    public class S3FileService : IS3FileService
+    public class S3FileService : IFileService
     {
-        private static string AccessKeyId => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_AWS_KEY");
-        private static string AccessSecret => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_AWS_SECRET");
+        private static string AccessKeyId => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_BACKUP_DEMO_AWS_KEY");
+        private static string AccessSecret => EnvironmentVariableHelper.GetEnvironmentVariable("CDP_BACKUP_DEMO_AWS_SECRET");
 
         private static readonly string BucketName = "cdp-demo-s3";
-
-        public static bool IsEnabled
-        {
-            get
-            {
-                string environmentValue = EnvironmentVariableHelper.GetEnvironmentVariable("CDP_DEMO_AWS_DISABLE")?.ToLower();
-
-                bool disabled = environmentValue == "1" || environmentValue == "true";
-
-                return !disabled;
-            }
-        }
 
         public FileDestination Destination => FileDestination.AmazonS3;
 
@@ -39,7 +27,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Amazon
             {
                 AmazonS3Client client = await GetS3Client();
 
-                PutObjectRequest request = new PutObjectRequest
+                PutObjectRequest request = new()
                 {
                     BucketName = BucketName,
                     Key = uploadFileName,
@@ -49,12 +37,9 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Amazon
 
                 PutObjectResponse response = await client.PutObjectAsync(request);
 
-                if (!response.IsSuccessStatusCode())
-                {
-                    return UploadFileResult.Error();
-                }
-
-                return UploadFileResult.Ok(uploadFileName);
+                return !response.IsSuccessStatusCode() 
+                    ? UploadFileResult.Error() 
+                    : UploadFileResult.Ok(uploadFileName);
             }
             catch (Exception e)
             {
@@ -68,7 +53,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Amazon
             {
                 AmazonS3Client client = await GetS3Client();
 
-                GetObjectRequest request = new GetObjectRequest
+                GetObjectRequest request = new()
                 {
                     BucketName = BucketName,
                     Key = id
@@ -86,16 +71,16 @@ namespace CloudDataProtection.Functions.BackupDemo.Service.Amazon
 
         private async Task<AmazonS3Client> GetS3Client()
         {
-            AmazonS3Client client = new AmazonS3Client(AccessKeyId, AccessSecret, RegionEndpoint.EUCentral1);
+            AmazonS3Client client = new(AccessKeyId, AccessSecret, RegionEndpoint.EUCentral1);
             
             ListBucketsResponse response = await client.ListBucketsAsync();
 
             if (!response.Buckets.Any(b => b.BucketName.Equals(BucketName)))
             {
-                PutBucketRequest request = new PutBucketRequest
+                PutBucketRequest request = new()
                 {
                     BucketName = BucketName,
-                    UseClientRegion = true,
+                    UseClientRegion = true
                 };
 
                 await client.PutBucketAsync(request);

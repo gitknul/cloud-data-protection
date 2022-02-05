@@ -3,7 +3,7 @@ using System.Linq;
 using CloudDataProtection.Functions.BackupDemo.Entities;
 using CloudDataProtection.Functions.BackupDemo.Extensions;
 
-namespace CloudDataProtection.Functions.BackupDemo.Triggers.Dto
+namespace CloudDataProtection.Functions.BackupDemo.Triggers.Dto.Result
 {
     public class FileUploadResult
     {

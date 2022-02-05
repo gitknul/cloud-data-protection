@@ -6,7 +6,7 @@ using CloudDataProtection.Functions.BackupDemo.Authentication;
 using CloudDataProtection.Functions.BackupDemo.Business;
 using CloudDataProtection.Functions.BackupDemo.Extensions;
 using CloudDataProtection.Functions.BackupDemo.Factory;
-using CloudDataProtection.Functions.BackupDemo.Triggers.Dto;
+using CloudDataProtection.Functions.BackupDemo.Triggers.Dto.Result;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;

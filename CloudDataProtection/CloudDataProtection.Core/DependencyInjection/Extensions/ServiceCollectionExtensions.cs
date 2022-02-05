@@ -27,6 +27,7 @@ namespace CloudDataProtection.Core.DependencyInjection.Extensions
             where TService : class 
             where TImplementation : DbContext, TService
         {
+            // TODO Read from environment variables
             services.Configure<AesOptions>(options => configuration.GetSection("Persistence").Bind(options));
             
             services.AddScoped<ITransformer, AesTransformer>();

@@ -7,8 +7,8 @@ using CloudDataProtection.Functions.BackupDemo.Business;
 using CloudDataProtection.Functions.BackupDemo.Entities;
 using CloudDataProtection.Functions.BackupDemo.Extensions;
 using CloudDataProtection.Functions.BackupDemo.Factory;
-using CloudDataProtection.Functions.BackupDemo.Triggers.Dto;
 using CloudDataProtection.Functions.BackupDemo.Triggers.Dto.Input;
+using CloudDataProtection.Functions.BackupDemo.Triggers.Dto.Result;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -52,7 +52,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Triggers
                 return new InternalServerErrorResult();
             }
 
-            FileUploadResult dto = new FileUploadResult
+            FileUploadResult dto = new()
             {
                 Id = result.Data.Id.ToString(),
                 Bytes = result.Data.Bytes,

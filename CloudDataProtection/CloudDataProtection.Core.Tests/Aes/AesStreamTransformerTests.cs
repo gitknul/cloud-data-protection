@@ -14,8 +14,6 @@ namespace CloudDataProtection.Core.Tests.Aes
         {
             _transformer = new AesStreamTransformer(new AesOptions
             {
-                KeySize = 256,
-                BlockSize = 128,
                 EncryptionKey = "KD6Gg7K9jdxYNMvRIs4fh21DwgaDCcNAFGBKBn4G9xE=",
                 EncryptionIv = "pdfn2d+30CvymJp2nAp1fg=="
             });

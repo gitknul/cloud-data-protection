@@ -1,0 +1,29 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MailService VCS" type="DotNetProject" factoryName=".NET Project">
+    <option name="EXE_PATH" value="$PROJECT_DIR$/CloudDataProtection.Services.MailService/bin/Debug/netcoreapp3.1/CloudDataProtection.Services.MailService.exe" />
+    <option name="PROGRAM_PARAMETERS" value="" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/CloudDataProtection.Services.MailService" />
+    <option name="PASS_PARENT_ENVS" value="1" />
+    <envs>
+      <env name="ASPNETCORE_ENVIRONMENT" value="Development" />
+      <env name="ASPNETCORE_URLS" value="https://localhost:5051" />
+      <env name="CDP_PAPERTRAIL_URL" value="" />
+      <env name="CDP_PAPERTRAIL_ACCESS_TOKEN" value="" />
+      <env name="CDP_SG_API_KEY" value="" />
+      <env name="CDP_SG_SENDER" value="" />
+    </envs>
+    <option name="USE_EXTERNAL_CONSOLE" value="0" />
+    <option name="USE_MONO" value="0" />
+    <option name="RUNTIME_ARGUMENTS" value="" />
+    <option name="RUNTIME_TYPE" value="coreclr" />
+    <option name="PROJECT_PATH" value="$PROJECT_DIR$/CloudDataProtection.Services.MailService/CloudDataProtection.Services.MailService.csproj" />
+    <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+    <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+    <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+    <option name="PROJECT_KIND" value="DotNetCore" />
+    <option name="PROJECT_TFM" value=".NETCoreApp,Version=v3.1" />
+    <method v="2">
+      <option name="Build" />
+    </method>
+  </configuration>
+</component>
