@@ -9,8 +9,6 @@
       <env name="ASPNETCORE_URLS" value="https://localhost:5051" />
       <env name="CDP_PAPERTRAIL_URL" value="" />
       <env name="CDP_PAPERTRAIL_ACCESS_TOKEN" value="" />
-      <env name="CDP_SG_API_KEY" value="" />
-      <env name="CDP_SG_SENDER" value="" />
     </envs>
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
     <option name="USE_MONO" value="0" />

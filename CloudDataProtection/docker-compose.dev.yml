@@ -7,12 +7,14 @@ services:
       - "7101:5672"
     volumes:
       - cdp_rabbitmq:/rabbitmq
+  
   cdp_postgres:
     image: "postgres"
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: postgresdevelopment
+  
   cdp_mongo:
     image: "mongo"
     ports:
@@ -22,6 +24,12 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: mongodevelopment
     volumes:
       - cdp_mongodb:/data/db
+  
+  cdp_mailhog:
+    image: "mailhog/mailhog"
+    ports: 
+      - "1025:1025"
+      - "8025:8025"
 
 volumes:
   cdp_rabbitmq:

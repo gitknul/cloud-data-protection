@@ -6,3 +6,7 @@ Branches:
 
 * Test: test environment
 * Develop: development branch
+
+## Mails in development
+
+Mails are development are sent to a fake mail server. You can open [MailHog](http://localhost:8025) to view all emails.
