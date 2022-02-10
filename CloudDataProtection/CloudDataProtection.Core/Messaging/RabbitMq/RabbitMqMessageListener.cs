@@ -18,7 +18,6 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
         private readonly RabbitMqConfiguration _configuration;
 
         protected abstract string RoutingKey { get; }
-        protected abstract string Queue { get; }
 
         private ConnectionFactory _connectionFactory;
         private ConnectionFactory ConnectionFactory
@@ -34,7 +33,7 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
                         UserName = _configuration.UserName,
                         Password = _configuration.Password,
                         VirtualHost = _configuration.VirtualHost,
-                        ClientProvidedName = GetType().Name
+                        ClientProvidedName = _type.Name
                     };
                 }
                 
@@ -45,12 +44,18 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
         private IConnection _connection;
         private IConnection Connection => _connection ??= ConnectionFactory.CreateConnection();
 
-        private IModel _channel; 
+        private IModel _channel;
+
+        private readonly Type _type;
+
+        private readonly string _queue;
 
         protected RabbitMqMessageListener(IOptions<RabbitMqConfiguration> options, ILogger<RabbitMqMessageListener<TModel>> logger)
         {
             _logger = logger;
             _configuration = options.Value;
+            _type = GetType();
+            _queue = GetQueueName();
             
             Init();
         }
@@ -105,6 +110,11 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
             _channel.BasicAck(args.DeliveryTag, false);
         }
 
+        private string GetQueueName()
+        {
+            return _type.Assembly.GetName().Name + "__" + _type.Name;
+        }
+
         private void Init()
         {
             Policy
@@ -130,8 +140,8 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
             _channel = Connection.CreateModel();
             _channel.ExchangeDeclare(_configuration.Exchange, ExchangeType.Fanout, true);
             
-            _channel.QueueDeclare(Queue, exclusive: false, durable: true, autoDelete: false);
-            _channel.QueueBind(Queue, _configuration.Exchange, RoutingKey);
+            _channel.QueueDeclare(_queue, exclusive: false, durable: true, autoDelete: false);
+            _channel.QueueBind(_queue, _configuration.Exchange, RoutingKey);
         }
     }
 }

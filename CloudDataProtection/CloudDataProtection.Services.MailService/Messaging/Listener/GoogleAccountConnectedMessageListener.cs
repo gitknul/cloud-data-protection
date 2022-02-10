@@ -18,7 +18,6 @@ namespace CloudDataProtection.Services.MailService.Messaging.Listener
         }
 
         protected override string RoutingKey => RoutingKeys.GoogleAccountConnected;
-        protected override string Queue => "2D0A7AE4-0AF4-468E-B775-54DB46980AD9";
         
         public override async Task HandleMessage(GoogleAccountConnectedModel model)
         {

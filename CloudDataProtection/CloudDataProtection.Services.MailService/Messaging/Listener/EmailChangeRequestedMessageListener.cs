@@ -18,7 +18,6 @@ namespace CloudDataProtection.Services.MailService.Messaging.Listener
         }
 
         protected override string RoutingKey => RoutingKeys.EmailChangeRequested;
-        protected override string Queue => "48B17AA1-62AE-4950-B408-91232DCE2E90";
         
         public override async Task HandleMessage(EmailChangeRequestedModel model)
         {

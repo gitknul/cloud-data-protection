@@ -22,7 +22,6 @@ namespace CloudDataProtection.Messaging.Listener
         }
 
         protected override string RoutingKey => RoutingKeys.UserDataDeleted;
-        protected override string Queue => "4E837635-178E-4063-981B-5B9B56C07CAD";
         public override async Task HandleMessage(UserDataDeletedModel model)
         {
             UserBusinessLogic logic = _scope.ServiceProvider.GetRequiredService<UserBusinessLogic>();

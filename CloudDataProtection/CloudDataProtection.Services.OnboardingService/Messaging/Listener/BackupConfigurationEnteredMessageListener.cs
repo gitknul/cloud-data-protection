@@ -22,7 +22,6 @@ namespace CloudDataProtection.Services.Onboarding.Messaging.Listener
         }
 
         protected override string RoutingKey => RoutingKeys.BackupConfigurationEntered;
-        protected override string Queue => "AC3585E6-23C1-47B0-9904-99F2C5965721";
         public override async Task HandleMessage(BackupConfigurationEnteredModel model)
         {
             OnboardingBusinessLogic logic = _scope.ServiceProvider.GetRequiredService<OnboardingBusinessLogic>();

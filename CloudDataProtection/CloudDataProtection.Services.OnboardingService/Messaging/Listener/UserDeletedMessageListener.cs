@@ -20,7 +20,6 @@ namespace CloudDataProtection.Services.Onboarding.Messaging.Listener
         }
 
         protected override string RoutingKey => RoutingKeys.UserDeleted;
-        protected override string Queue => "4E252C81-09AD-4831-A4A7-AFA0073F2392";
         
         public override async Task HandleMessage(UserDeletedModel model)
         {

@@ -19,7 +19,6 @@ namespace CloudDataProtection.Services.Onboarding.Messaging.Listener
         }
 
         protected override string RoutingKey => RoutingKeys.UserRegistered;
-        protected override string Queue => "42D7C890-F91D-4343-8D8D-0CA0F11AF793";
         public override async Task HandleMessage(UserRegisteredModel model)
         {
             if (model.Role == UserRegisteredRole.Client)
