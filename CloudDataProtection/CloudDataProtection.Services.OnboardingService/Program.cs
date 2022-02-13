@@ -19,7 +19,7 @@ namespace CloudDataProtection.Services.Onboarding
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(loggingBuilder => loggingBuilder.ConfigureLogging())
+                .ConfigureLogging(loggingBuilder => loggingBuilder.AddPapertrail())
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
         }
     }

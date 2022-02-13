@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace CloudDataProtection.Messaging.Publisher
 {
-    public class EmailChangeRequestedMessagePublisher : RabbitMqMessagePublisher<EmailChangeRequestedModel>
+    public class EmailChangeRequestedMessagePublisher : RabbitMqMessagePublisher<EmailChangeRequestedMessage>
     {
         public EmailChangeRequestedMessagePublisher(IOptions<RabbitMqConfiguration> options, ILogger<EmailChangeRequestedMessagePublisher> logger) : base(options, logger)
         {
@@ -15,7 +15,7 @@ namespace CloudDataProtection.Messaging.Publisher
         protected override string RoutingKey => RoutingKeys.EmailChangeRequested;
     }
 
-    public class EmailChangeRequestedModel
+    public class EmailChangeRequestedMessage
     {
         public string NewEmail { get; set; }
         

@@ -6,12 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using CloudDataProtection.Core.Cryptography.Aes;
 using CloudDataProtection.Core.Result;
+using CloudDataProtection.Functions.BackupDemo.Business.Result;
 using CloudDataProtection.Functions.BackupDemo.Entities;
 using CloudDataProtection.Functions.BackupDemo.Extensions;
 using CloudDataProtection.Functions.BackupDemo.Repository;
 using CloudDataProtection.Functions.BackupDemo.Service;
 using CloudDataProtection.Functions.BackupDemo.Service.Result;
-using CloudDataProtection.Functions.BackupDemo.Triggers.Dto.Result;
 using Microsoft.AspNetCore.Http;
 using File = CloudDataProtection.Functions.BackupDemo.Entities.File;
 
@@ -100,19 +100,19 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
             return BusinessResult<File>.Ok(file);
         }
 
-        public async Task<BusinessResult<FileDownloadResult>> Download(Guid id)
+        public async Task<BusinessResult<FileDownloadInfo>> Download(Guid id)
         {
             BusinessResult<File> result = await Get(id);
             
             if (!result.Success)
             {
-                return BusinessResult<FileDownloadResult>.Error("An unknown error occured while retrieving info of the file");
+                return BusinessResult<FileDownloadInfo>.Error("An unknown error occured while retrieving info of the file");
             }
             
             return await Download(result.Data);
         }
 
-        private async Task<BusinessResult<FileDownloadResult>> Download(File file)
+        private async Task<BusinessResult<FileDownloadInfo>> Download(File file)
         {
             bool downloaded = false;
             byte[] data = Array.Empty<byte>();
@@ -150,10 +150,10 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
 
             if (!downloaded)
             {
-                return BusinessResult<FileDownloadResult>.Error("An unknown error occured while attempting to download the file");
+                return BusinessResult<FileDownloadInfo>.Error("An unknown error occured while attempting to download the file");
             }
             
-            FileDownloadResult result = new()
+            FileDownloadInfo downloadInfo = new()
             {
                 Bytes = data,
                 FileName = file.DisplayName,
@@ -161,7 +161,7 @@ namespace CloudDataProtection.Functions.BackupDemo.Business
                 DownloadedFrom = downloadedFrom
             };
             
-            return BusinessResult<FileDownloadResult>.Ok(result);
+            return BusinessResult<FileDownloadInfo>.Ok(downloadInfo);
         }
 
         private string GenerateFileName()

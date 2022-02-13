@@ -2,16 +2,17 @@
 using CloudDataProtection.Business;
 using CloudDataProtection.Core.Messaging.RabbitMq;
 using CloudDataProtection.Core.Messaging.Rpc;
+using CloudDataProtection.Core.Messaging.Rpc.Dto.Input;
+using CloudDataProtection.Core.Messaging.Rpc.Dto.Output;
 using CloudDataProtection.Core.Result;
 using CloudDataProtection.Entities;
-using CloudDataProtection.Messaging.Server.Dto;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace CloudDataProtection.Messaging.Server
 {
-    public class GetUserEmailRpcServer : RabbitMqRpcServer<GetUserEmailInput, GetUserEmailOutput>
+    public class GetUserEmailRpcServer : RabbitMqRpcServer<GetUserEmailRpcInput, GetUserEmailRpcOutput>
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
@@ -20,7 +21,7 @@ namespace CloudDataProtection.Messaging.Server
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-        public override async Task<GetUserEmailOutput> HandleMessage(GetUserEmailInput model)
+        public override async Task<GetUserEmailRpcOutput> HandleMessage(GetUserEmailRpcInput model)
         {
             using (IServiceScope scope = _serviceScopeFactory.CreateScope())
             {
@@ -30,14 +31,14 @@ namespace CloudDataProtection.Messaging.Server
 
                 if (!result.Success)
                 {
-                    return new GetUserEmailOutput
+                    return new GetUserEmailRpcOutput
                     {
                         Status = RpcResponseStatus.Error,
                         StatusMessage = result.Message
                     };
                 }
         
-                return new GetUserEmailOutput
+                return new GetUserEmailRpcOutput
                 {
                     Email = result.Data.Email,
                     Status = RpcResponseStatus.Ok

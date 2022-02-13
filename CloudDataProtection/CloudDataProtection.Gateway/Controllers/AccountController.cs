@@ -2,18 +2,20 @@
 using System.Threading.Tasks;
 using CloudDataProtection.Business;
 using CloudDataProtection.Business.Options;
+using CloudDataProtection.Controllers.Dto.Input;
+using CloudDataProtection.Controllers.Dto.Output;
 using CloudDataProtection.Core.Controllers;
 using CloudDataProtection.Core.Jwt;
 using CloudDataProtection.Core.Messaging;
+using CloudDataProtection.Core.Messaging.Dto;
 using CloudDataProtection.Core.Rest.Errors;
 using CloudDataProtection.Core.Result;
-using CloudDataProtection.Dto.Input;
-using CloudDataProtection.Dto.Result;
 using CloudDataProtection.Entities;
-using CloudDataProtection.Messaging.Publisher;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using EmailChangeRequestedMessage = CloudDataProtection.Messaging.Publisher.EmailChangeRequestedMessage;
+using UserDeletedMessage = CloudDataProtection.Messaging.Publisher.UserDeletedMessage;
 
 namespace CloudDataProtection.Controllers
 {
@@ -22,17 +24,17 @@ namespace CloudDataProtection.Controllers
     [Authorize]
     public class AccountController : ServiceController
     {
-        private readonly Lazy<IMessagePublisher<UserDeletedModel>> _userDeletedMessagePublisher;
-        private readonly Lazy<IMessagePublisher<EmailChangeRequestedModel>> _emailChangeRequestedMessagePublisher;
-        private readonly Lazy<IMessagePublisher<PasswordUpdatedModel>> _passwordUpdatedMessagePublisher;
+        private readonly Lazy<IMessagePublisher<UserDeletedMessage>> _userDeletedMessagePublisher;
+        private readonly Lazy<IMessagePublisher<EmailChangeRequestedMessage>> _emailChangeRequestedMessagePublisher;
+        private readonly Lazy<IMessagePublisher<PasswordUpdatedMessage>> _passwordUpdatedMessagePublisher;
         private readonly ChangeEmailOptions _changeEmailOptions;
         private readonly UserBusinessLogic _userBusinessLogic;
         private readonly AuthenticationBusinessLogic _authenticationBusinessLogic;
         
         public AccountController(IJwtDecoder jwtDecoder,
-            Lazy<IMessagePublisher<UserDeletedModel>> userDeletedMessagePublisher, 
-            Lazy<IMessagePublisher<EmailChangeRequestedModel>> emailChangeRequestedMessagePublisher,
-            Lazy<IMessagePublisher<PasswordUpdatedModel>> passwordUpdatedMessagePublisher,
+            Lazy<IMessagePublisher<UserDeletedMessage>> userDeletedMessagePublisher, 
+            Lazy<IMessagePublisher<EmailChangeRequestedMessage>> emailChangeRequestedMessagePublisher,
+            Lazy<IMessagePublisher<PasswordUpdatedMessage>> passwordUpdatedMessagePublisher,
             IOptions<ChangeEmailOptions> changeEmailOptions,
             UserBusinessLogic userBusinessLogic, 
             AuthenticationBusinessLogic authenticationBusinessLogic) : base(jwtDecoder)
@@ -58,14 +60,14 @@ namespace CloudDataProtection.Controllers
 
             ChangeEmailRequest changeEmailRequest = changeEmailResult.Data;
 
-            EmailChangeRequestedModel model = new EmailChangeRequestedModel
+            EmailChangeRequestedMessage message = new EmailChangeRequestedMessage
             {
                 NewEmail = changeEmailRequest.NewEmail,
                 Url = _changeEmailOptions.FormatUrl(changeEmailRequest.Token),
                 ExpiresAt = changeEmailRequest.ExpiresAt
             };
 
-            await _emailChangeRequestedMessagePublisher.Value.Send(model);
+            await _emailChangeRequestedMessagePublisher.Value.Send(message);
             
             return Ok();
         }
@@ -82,12 +84,12 @@ namespace CloudDataProtection.Controllers
                 return Conflict(ConflictResponse.Create(changeEmailResult.Message));
             }
 
-            ConfirmChangeEmailResult result = new ConfirmChangeEmailResult
+            ConfirmChangeEmailOutput output = new ConfirmChangeEmailOutput
             {
                 Email = changeEmailResult.Data
             };
 
-            return Ok(result);
+            return Ok(output);
         }
 
         [HttpPatch]
@@ -101,13 +103,13 @@ namespace CloudDataProtection.Controllers
                 return Conflict(ConflictResponse.Create(changePasswordResult.Message));
             }
 
-            PasswordUpdatedModel model = new PasswordUpdatedModel
+            PasswordUpdatedMessage message = new PasswordUpdatedMessage
             {
                 Email = changePasswordResult.Data.Email,
                 UserId = changePasswordResult.Data.Id
             };
 
-            await _passwordUpdatedMessagePublisher.Value.Send(model);
+            await _passwordUpdatedMessagePublisher.Value.Send(message);
 
             return Ok();
         }
@@ -124,13 +126,13 @@ namespace CloudDataProtection.Controllers
                 return Conflict(ConflictResponse.Create(updatePasswordResult.Message));
             }
 
-            PasswordUpdatedModel model = new PasswordUpdatedModel
+            PasswordUpdatedMessage message = new PasswordUpdatedMessage
             {
                 UserId = updatePasswordResult.Data.Id,
                 Email = updatePasswordResult.Data.Email
             };
 
-            await _passwordUpdatedMessagePublisher.Value.Send(model);
+            await _passwordUpdatedMessagePublisher.Value.Send(message);
 
             return Ok();
         }
@@ -150,7 +152,7 @@ namespace CloudDataProtection.Controllers
 
             User user = getUserResult.Data;
 
-            UserDeletedModel model = new UserDeletedModel
+            UserDeletedMessage message = new UserDeletedMessage
             {
                 Email = user.Email,
                 UserId = user.Id
@@ -158,7 +160,7 @@ namespace CloudDataProtection.Controllers
 
             await _userBusinessLogic.Delete(user.Id);
 
-            await _userDeletedMessagePublisher.Value.Send(model);
+            await _userDeletedMessagePublisher.Value.Send(message);
             
             return Accepted();
         }

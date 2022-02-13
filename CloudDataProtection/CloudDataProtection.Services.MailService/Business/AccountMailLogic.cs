@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using CloudDataProtection.Core.Messaging.Dto;
 using CloudDataProtection.Services.MailService.Business.Base;
-using CloudDataProtection.Services.MailService.Dto;
 using CloudDataProtection.Services.MailService.Sender;
 
 namespace CloudDataProtection.Services.MailService.Business
@@ -66,27 +66,27 @@ namespace CloudDataProtection.Services.MailService.Business
         /// <summary>
         /// Sends a mail to a user containing a request to reset a password
         /// </summary>
-        public async Task SendResetPassword(ResetPasswordModel model)
+        public async Task SendResetPassword(ResetPasswordMessage message)
         {
             string subject = "Reset your password";
             string content = @$"
 <p>Dear Sir / Madam,<br><br>
-    We received a request to reset your password. Please click <a href='{model.Url}'>here</a> to set up your new password.<br><br>
-    If the link above doesn't work, please copy and paste the following link in your web browser: {model.Url}<br><br>
-    This link will expire at {model.Expiration.ToString("F")}<br><br>
+    We received a request to reset your password. Please click <a href='{message.Url}'>here</a> to set up your new password.<br><br>
+    If the link above doesn't work, please copy and paste the following link in your web browser: {message.Url}<br><br>
+    This link will expire at {message.Expiration.ToString("F")}<br><br>
     Yours sincerely,<br><br>
     Cloud Data Protection
   </p>";
             
             string body = ComposeBody(content);
             
-            await _sender.Send(model.Email, subject, body);
+            await _sender.Send(message.Email, subject, body);
         }
 
         /// <summary>
         /// Sends a mail to a user confirming their password is updated
         /// </summary>
-        public async Task SendPasswordUpdated(PasswordUpdatedModel model)
+        public async Task SendPasswordUpdated(PasswordUpdatedMessage message)
         {
             string subject = "Your password was reset";
             string content = @$"
@@ -98,7 +98,7 @@ namespace CloudDataProtection.Services.MailService.Business
             
             string body = ComposeBody(content);
             
-            await _sender.Send(model.Email, subject, body);
+            await _sender.Send(message.Email, subject, body);
         }
     }
 }

@@ -4,14 +4,15 @@ using AutoMapper;
 using CloudDataProtection.Core.Controllers;
 using CloudDataProtection.Core.Jwt;
 using CloudDataProtection.Core.Messaging;
+using CloudDataProtection.Core.Messaging.Dto;
+using CloudDataProtection.Core.Messaging.Rpc.Dto.Input;
+using CloudDataProtection.Core.Messaging.Rpc.Dto.Output;
 using CloudDataProtection.Core.Rest.Errors;
 using CloudDataProtection.Core.Result;
 using CloudDataProtection.Services.Onboarding.Business;
 using CloudDataProtection.Services.Onboarding.Config;
-using CloudDataProtection.Services.Onboarding.Dto;
+using CloudDataProtection.Services.Onboarding.Controllers.Dto.Output;
 using CloudDataProtection.Services.Onboarding.Entities;
-using CloudDataProtection.Services.Onboarding.Messaging.Client.Dto;
-using CloudDataProtection.Services.Onboarding.Messaging.Publisher.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -26,16 +27,16 @@ namespace CloudDataProtection.Services.Onboarding.Controllers
         private readonly Lazy<OnboardingBusinessLogic> _logic;
         private readonly IMapper _mapper;
         private readonly OnboardingOptions _options;
-        private readonly Lazy<IMessagePublisher<GoogleAccountConnectedModel>> _messagePublisher;
-        private readonly Lazy<IRpcClient<GetUserEmailInput, GetUserEmailOutput>> _getUserEmailClient;
+        private readonly Lazy<IMessagePublisher<GoogleAccountConnectedMessage>> _messagePublisher;
+        private readonly Lazy<IRpcClient<GetUserEmailRpcInput, GetUserEmailRpcOutput>> _getUserEmailClient;
 
         public OnboardingController(
             Lazy<OnboardingBusinessLogic> logic, 
             IJwtDecoder jwtDecoder, 
             IMapper mapper, 
             IOptions<OnboardingOptions> options, 
-            Lazy<IMessagePublisher<GoogleAccountConnectedModel>> messagePublisher, 
-            Lazy<IRpcClient<GetUserEmailInput, GetUserEmailOutput>> getUserEmailClient) : base(jwtDecoder)
+            Lazy<IMessagePublisher<GoogleAccountConnectedMessage>> messagePublisher, 
+            Lazy<IRpcClient<GetUserEmailRpcInput, GetUserEmailRpcOutput>> getUserEmailClient) : base(jwtDecoder)
         {
             _logic = logic;
             _mapper = mapper;
@@ -55,7 +56,7 @@ namespace CloudDataProtection.Services.Onboarding.Controllers
                 return NotFound(NotFoundResponse.Create("User", UserId));
             }
 
-            OnboardingResult result = _mapper.Map<OnboardingResult>(businessResult.Data);
+            OnboardingOutput output = _mapper.Map<OnboardingOutput>(businessResult.Data);
 
             if (businessResult.Data.Status == OnboardingStatus.None)
             {
@@ -66,10 +67,10 @@ namespace CloudDataProtection.Services.Onboarding.Controllers
                     return Problem(loginInfoBusinessResult.Message);
                 }
                 
-                result.LoginInfo = _mapper.Map<GoogleLoginInfoResult>(loginInfoBusinessResult.Data);
+                output.LoginInfo = _mapper.Map<GoogleLoginInfoOutput>(loginInfoBusinessResult.Data);
             }
 
-            return Ok(result);
+            return Ok(output);
         }
 
         [HttpGet]
@@ -95,13 +96,17 @@ namespace CloudDataProtection.Services.Onboarding.Controllers
 
             long userId = businessResult.Data.UserId;
 
-            GetUserEmailInput input = new GetUserEmailInput(userId);
+            GetUserEmailRpcInput input = new GetUserEmailRpcInput(userId);
 
-            GetUserEmailOutput response = await _getUserEmailClient.Value.Request(input);
+            GetUserEmailRpcOutput response = await _getUserEmailClient.Value.Request(input);
 
-            GoogleAccountConnectedModel model = new GoogleAccountConnectedModel(userId, response.Email);
+            GoogleAccountConnectedMessage message = new GoogleAccountConnectedMessage
+            {
+                UserId = userId,
+                Email = response.Email
+            };
 
-            await _messagePublisher.Value.Send(model);
+            await _messagePublisher.Value.Send(message);
             
             return Redirect(_options.RedirectUri);
         }

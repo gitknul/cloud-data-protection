@@ -2,8 +2,8 @@
 
 namespace CloudDataProtection.Core.Messaging
 {
-    public interface IMessagePublisher<in TModel>
+    public interface IMessagePublisher<in TMessage>
     {
-        Task Send(TModel model);
+        Task Send(TMessage model);
     }
 }

@@ -6,7 +6,7 @@ using CloudDataProtection.Core.Controllers;
 using CloudDataProtection.Core.Jwt;
 using CloudDataProtection.Core.Result;
 using CloudDataProtection.Services.Subscription.Business;
-using CloudDataProtection.Services.Subscription.Dto;
+using CloudDataProtection.Services.Subscription.Controllers.Dto.Output;
 using CloudDataProtection.Services.Subscription.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +38,7 @@ namespace CloudDataProtection.Services.Subscription.Controllers
                 return Problem("An error occured while attempting to retrieve the backup schemes");
             }
 
-            return Ok(_mapper.Map<ICollection<BackupSchemeResult>>(businessResult.Data));
+            return Ok(_mapper.Map<ICollection<BackupSchemeOuput>>(businessResult.Data));
         }
     }
 }

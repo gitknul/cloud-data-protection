@@ -2,8 +2,8 @@
 
 namespace CloudDataProtection.Core.Messaging
 {
-    public interface IMessageListener<in TModel>
+    public interface IMessageListener<in TMessage>
     {
-        Task HandleMessage(TModel model);
+        Task HandleMessage(TMessage model);
     }
 }

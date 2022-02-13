@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CloudDataProtection.Business;
+using CloudDataProtection.Controllers.Dto.Input;
+using CloudDataProtection.Controllers.Dto.Output;
 using CloudDataProtection.Core.Messaging;
+using CloudDataProtection.Core.Messaging.Dto;
 using CloudDataProtection.Core.Rest.Errors;
 using CloudDataProtection.Core.Result;
-using CloudDataProtection.Dto.Input;
-using CloudDataProtection.Dto.Result;
 using CloudDataProtection.Entities;
 using CloudDataProtection.Jwt;
 using Microsoft.AspNetCore.Authorization;
@@ -19,10 +20,10 @@ namespace CloudDataProtection.Controllers
     {
         private readonly AuthenticationBusinessLogic _logic;
         private readonly IJwtHelper _jwtHelper;
-        private readonly Lazy<IMessagePublisher<ClientResult>> _messagePublisher;
+        private readonly Lazy<IMessagePublisher<ClientRegisteredMessage>> _messagePublisher;
 
         public AuthenticationController(AuthenticationBusinessLogic logic, IJwtHelper jwtHelper, 
-            Lazy<IMessagePublisher<ClientResult>> messagePublisher)
+            Lazy<IMessagePublisher<ClientRegisteredMessage>> messagePublisher)
         {
             _logic = logic;
             _jwtHelper = jwtHelper;
@@ -31,7 +32,7 @@ namespace CloudDataProtection.Controllers
         
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<ActionResult> Authenticate([FromBody] LoginInput input)
+        public async Task<ActionResult> Authenticate([FromBody] AuthenticateInput input)
         {
             BusinessResult<User> businessResult = await _logic.Authenticate(input.Email, input.Password);
 
@@ -42,9 +43,9 @@ namespace CloudDataProtection.Controllers
 
             User user = businessResult.Data;
 
-            AuthenticateResult result = new AuthenticateResult
+            AuthenticateOutput output = new AuthenticateOutput
             {
-                User = new LoginUserResult
+                User = new LoginUserOutput
                 {
                     Email = user.Email,
                     Id = user.Id,
@@ -53,7 +54,7 @@ namespace CloudDataProtection.Controllers
                 Token = _jwtHelper.GenerateToken(user)
             };
             
-            return Ok(result);
+            return Ok(output);
         }
 
         [AllowAnonymous]
@@ -73,15 +74,15 @@ namespace CloudDataProtection.Controllers
                 return Conflict(ConflictResponse.Create(businessResult.Message));
             }
             
-            ClientResult result = new ClientResult
+            ClientRegisteredMessage registeredMessage = new ClientRegisteredMessage
             {
                 Email = user.Email,
                 Id = user.Id
             };
 
-            await _messagePublisher.Value.Send(result);
+            await _messagePublisher.Value.Send(registeredMessage);
             
-            return Ok(result);
+            return Ok(registeredMessage);
         }
     }
 }

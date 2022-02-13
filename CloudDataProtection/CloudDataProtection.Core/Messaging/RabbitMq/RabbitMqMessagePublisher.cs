@@ -9,9 +9,9 @@ using RabbitMQ.Client;
 
 namespace CloudDataProtection.Core.Messaging.RabbitMq
 {
-    public abstract class RabbitMqMessagePublisher<TModel> : IMessagePublisher<TModel> where TModel : class  
+    public abstract class RabbitMqMessagePublisher<TMessage> : IMessagePublisher<TMessage> where TMessage : class  
     {
-        private readonly ILogger<RabbitMqMessagePublisher<TModel>> _logger;
+        private readonly ILogger<RabbitMqMessagePublisher<TMessage>> _logger;
         
         private readonly RabbitMqConfiguration _configuration;
 
@@ -44,7 +44,7 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
 
         private IModel _channel; 
 
-        protected RabbitMqMessagePublisher(IOptions<RabbitMqConfiguration> options, ILogger<RabbitMqMessagePublisher<TModel>> logger)
+        protected RabbitMqMessagePublisher(IOptions<RabbitMqConfiguration> options, ILogger<RabbitMqMessagePublisher<TMessage>> logger)
         {
             _logger = logger;
             _configuration = options.Value;
@@ -52,23 +52,23 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
             Init();
         }
         
-        public async Task Send(TModel obj)
+        public async Task Send(TMessage obj)
         {
-            IBasicProperties message = _channel.CreateBasicProperties();
+            IBasicProperties properties = _channel.CreateBasicProperties();
 
-            message.ContentType = _configuration.ContentType;
+            properties.ContentType = _configuration.ContentType;
 
-            byte[] body = JsonSerializer.SerializeToUtf8Bytes(obj, typeof(TModel));
+            byte[] body = JsonSerializer.SerializeToUtf8Bytes(obj, typeof(TMessage));
             
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            await DoSend(message, body);
+            await DoSend(properties, body);
 
             _connection?.Close();
 
             stopwatch.Stop();
 
-            _logger.Log(LogLevel.Information, "{Type}.{Method} to {Host} took {Ms}ms", this.GetType().Name, nameof(Send), _configuration.Hostname,
+            _logger.Log(LogLevel.Information, "{Type}.{Method} to {Host} took {Ms}ms", GetType().Name, nameof(Send), _configuration.Hostname,
                 stopwatch.ElapsedMilliseconds);
         }
 

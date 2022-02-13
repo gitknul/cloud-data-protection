@@ -1,17 +1,12 @@
 using System.Threading.Tasks;
-using CloudDataProtection.Business;
-using CloudDataProtection.Business.Options;
 using CloudDataProtection.Core.DependencyInjection.Extensions;
-using CloudDataProtection.Core.Messaging;
 using CloudDataProtection.Core.Papertrail.Extensions;
 using CloudDataProtection.Data.Context;
-using CloudDataProtection.Dto.Result;
 using CloudDataProtection.Seeder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 
 namespace CloudDataProtection
 {
@@ -33,7 +28,7 @@ namespace CloudDataProtection
             return builder
                 .ConfigureServices(s => s.AddSingleton(builder))
                 .ConfigureAppConfiguration((context, config) => config.AddJsonFile($"ocelot.{context.HostingEnvironment.EnvironmentName}.json"))
-                .ConfigureLogging(loggingBuilder => loggingBuilder.ConfigureLogging())
+                .ConfigureLogging(loggingBuilder => loggingBuilder.AddPapertrail())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -16,7 +16,7 @@ namespace CloudDataProtection.Core.Data.Context
 
         private static ILoggerFactory CreateLoggerFactory()
         {
-            return Microsoft.Extensions.Logging.LoggerFactory.Create(builder => builder.ConfigureLogging());
+            return Microsoft.Extensions.Logging.LoggerFactory.Create(builder => builder.AddPapertrail());
         }
 
         private readonly ITransformer _transformer;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net;
-using CloudDataProtection.Core.Rest.Errors.Action;
+﻿using System.Net;
 
 namespace CloudDataProtection.Core.Rest.Errors
 {
@@ -15,13 +13,6 @@ namespace CloudDataProtection.Core.Rest.Errors
         public static NotFoundResponse Create(string type, object id)
         {
             string message = $"Could not find {type.ToLower()} with id = {id}";
-            
-            return new NotFoundResponse(message);
-        }
-        
-        private static NotFoundResponse Create(Type type, object id, CrudAction action)
-        {
-            string message = $"Could not {action.ToString().ToLower()} {type.Name.ToLower()} with id = {id}";
             
             return new NotFoundResponse(message);
         }

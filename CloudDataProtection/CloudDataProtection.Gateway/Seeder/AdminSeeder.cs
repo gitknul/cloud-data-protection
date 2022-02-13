@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using CloudDataProtection.Business;
 using CloudDataProtection.Business.Options;
 using CloudDataProtection.Core.Messaging;
+using CloudDataProtection.Core.Messaging.Dto;
 using CloudDataProtection.Core.Result;
-using CloudDataProtection.Dto.Result;
 using CloudDataProtection.Entities;
 using Microsoft.Extensions.Options;
 
@@ -14,11 +14,11 @@ namespace CloudDataProtection.Seeder
     public class AdminSeeder
     {
         private readonly AuthenticationBusinessLogic _logic;
-        private readonly IMessagePublisher<AdminRegisteredModel> _messagePublisher;
+        private readonly IMessagePublisher<AdminRegisteredMessage> _messagePublisher;
         private readonly AdminSeederOptions _options;
         private readonly ResetPasswordOptions _resetPasswordOptions;
 
-        public AdminSeeder(AuthenticationBusinessLogic logic, IMessagePublisher<AdminRegisteredModel> publisher, IOptions<AdminSeederOptions> options, IOptions<ResetPasswordOptions> resetPasswordOptions)
+        public AdminSeeder(AuthenticationBusinessLogic logic, IMessagePublisher<AdminRegisteredMessage> publisher, IOptions<AdminSeederOptions> options, IOptions<ResetPasswordOptions> resetPasswordOptions)
         {
             _logic = logic;
             _messagePublisher = publisher;
@@ -54,7 +54,7 @@ namespace CloudDataProtection.Seeder
                 return;
             }
 
-            AdminRegisteredModel registeredModel = new AdminRegisteredModel
+            AdminRegisteredMessage registeredMessage = new AdminRegisteredMessage
             {
                 Email = adminUser.Email,
                 Id = adminUser.Id,
@@ -62,7 +62,7 @@ namespace CloudDataProtection.Seeder
                 Expiration = requestResetResult.Data.ExpiresAt
             };
 
-            await _messagePublisher.Send(registeredModel);
+            await _messagePublisher.Send(registeredMessage);
         }
     }
 }

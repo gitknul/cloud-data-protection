@@ -4,12 +4,13 @@ using AutoMapper;
 using CloudDataProtection.Core.Controllers;
 using CloudDataProtection.Core.Jwt;
 using CloudDataProtection.Core.Messaging;
+using CloudDataProtection.Core.Messaging.Dto;
 using CloudDataProtection.Core.Rest.Errors;
 using CloudDataProtection.Core.Result;
 using CloudDataProtection.Services.Subscription.Business;
-using CloudDataProtection.Services.Subscription.Dto;
+using CloudDataProtection.Services.Subscription.Controllers.Dto.Input;
+using CloudDataProtection.Services.Subscription.Controllers.Dto.Output;
 using CloudDataProtection.Services.Subscription.Entities;
-using CloudDataProtection.Services.Subscription.Messaging.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,10 +23,10 @@ namespace CloudDataProtection.Services.Subscription.Controllers
     {
         private readonly Lazy<BackupConfigurationBusinessLogic> _logic;
         private readonly Lazy<BackupSchemeBusinessLogic> _schemeLogic;
-        private readonly Lazy<IMessagePublisher<BackupConfigurationEnteredModel>> _messagePublisher;
+        private readonly Lazy<IMessagePublisher<BackupConfigurationEnteredMessage>> _messagePublisher;
         private readonly IMapper _mapper;
 
-        public BackupConfigurationController(IJwtDecoder jwtDecoder, Lazy<BackupConfigurationBusinessLogic> logic, Lazy<BackupSchemeBusinessLogic> schemeLogic, IMapper mapper, Lazy<IMessagePublisher<BackupConfigurationEnteredModel>> messagePublisher) : base(jwtDecoder)
+        public BackupConfigurationController(IJwtDecoder jwtDecoder, Lazy<BackupConfigurationBusinessLogic> logic, Lazy<BackupSchemeBusinessLogic> schemeLogic, IMapper mapper, Lazy<IMessagePublisher<BackupConfigurationEnteredMessage>> messagePublisher) : base(jwtDecoder)
         {
             _logic = logic;
             _schemeLogic = schemeLogic;
@@ -49,9 +50,9 @@ namespace CloudDataProtection.Services.Subscription.Controllers
                 return Problem("An error occured while attempting to retrieve the backup configuration");
             }
 
-            BackupConfigurationResult result = _mapper.Map<BackupConfigurationResult>(businessResult.Data);
+            BackupConfigurationOutput output = _mapper.Map<BackupConfigurationOutput>(businessResult.Data);
 
-            return Ok(result);
+            return Ok(output);
         }
 
         [HttpPost]
@@ -86,12 +87,12 @@ namespace CloudDataProtection.Services.Subscription.Controllers
                 return Conflict(ConflictResponse.Create(businessResult.Message));
             }
 
-            BackupConfigurationEnteredModel model = new BackupConfigurationEnteredModel
+            BackupConfigurationEnteredMessage message = new BackupConfigurationEnteredMessage
             {
                 UserId = businessResult.Data.UserId
             };
 
-            await _messagePublisher.Value.Send(model);
+            await _messagePublisher.Value.Send(message);
             
             CreateBackupConfigurationResult result = _mapper.Map<CreateBackupConfigurationResult>(businessResult.Data);
 

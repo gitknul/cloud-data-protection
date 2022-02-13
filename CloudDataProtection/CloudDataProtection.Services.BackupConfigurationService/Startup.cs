@@ -1,27 +1,21 @@
-using System.Security.Claims;
 using AutoMapper;
-using CloudDataProtection.Core.Controllers.Data;
 using CloudDataProtection.Core.DependencyInjection.Extensions;
-using CloudDataProtection.Core.Jwt;
-using CloudDataProtection.Core.Jwt.Options;
 using CloudDataProtection.Core.Messaging;
+using CloudDataProtection.Core.Messaging.Dto;
 using CloudDataProtection.Core.Messaging.RabbitMq;
 using CloudDataProtection.Services.Subscription.Business;
+using CloudDataProtection.Services.Subscription.Controllers.Dto.Output;
 using CloudDataProtection.Services.Subscription.Data.Context;
 using CloudDataProtection.Services.Subscription.Data.Repository;
-using CloudDataProtection.Services.Subscription.Dto;
 using CloudDataProtection.Services.Subscription.Entities;
-using CloudDataProtection.Services.Subscription.Messaging.Dto;
 using CloudDataProtection.Services.Subscription.Messaging.Listener;
 using CloudDataProtection.Services.Subscription.Messaging.Publisher;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace CloudDataProtection.Services.Subscription
@@ -54,8 +48,8 @@ namespace CloudDataProtection.Services.Subscription
             
             services.Configure<RabbitMqConfiguration>(options => Configuration.GetSection("RabbitMq").Bind(options));
             
-            services.AddLazy<IMessagePublisher<BackupConfigurationEnteredModel>, BackupConfigurationEnteredMessagePublisher>();
-            services.AddLazy<IMessagePublisher<UserDataDeletedModel>, UserDataDeletedMessagePublisher>();
+            services.AddLazy<IMessagePublisher<BackupConfigurationEnteredMessage>, BackupConfigurationEnteredMessagePublisher>();
+            services.AddLazy<IMessagePublisher<UserDataDeletedMessage>, UserDataDeletedMessagePublisher>();
 
             services.AddHostedService<UserDeletedMessageListener>();
 
@@ -82,13 +76,13 @@ namespace CloudDataProtection.Services.Subscription
 
         private void ConfigureMapper(IMapperConfigurationExpression config)
         {
-            config.CreateMap<BackupScheme, BackupSchemeResult>()
+            config.CreateMap<BackupScheme, BackupSchemeOuput>()
                 .ForMember(p => p.Hour, 
                     options => options.MapFrom(s => s.Time.Hours))
                 .ForMember(p => p.Minute, 
                     options => options.MapFrom(s => s.Time.Minutes));
             
-            config.CreateMap<BackupConfiguration, BackupConfigurationResult>()
+            config.CreateMap<BackupConfiguration, BackupConfigurationOutput>()
                 .ForMember(p => p.Hour, 
                     options => options.MapFrom(s => s.Time.Hours))
                 .ForMember(p => p.Minute, 

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using CloudDataProtection.Core.Messaging.Dto;
 using CloudDataProtection.Services.MailService.Business.Base;
-using CloudDataProtection.Services.MailService.Dto;
 using CloudDataProtection.Services.MailService.Sender;
 
 namespace CloudDataProtection.Services.MailService.Business
@@ -29,21 +29,21 @@ namespace CloudDataProtection.Services.MailService.Business
             await _sender.Send(email, subject, body);
         }
 
-        public async Task SendAdminRegistered(ResetPasswordModel model)
+        public async Task SendAdminRegistered(ResetPasswordMessage message)
         {
             string subject = "Welcome to Cloud Data Protection";
             string content = @$"
 <p>Dear Sir / Madam,<br><br>
-    Please click <a href='{model.Url}'>here</a> to set up your password.<br><br>
-    If the link above doesn't work, please copy and paste the following link in your web browser: {model.Url}<br><br>
-    This link will expire at {model.Expiration.ToString("F")}<br><br>
+    Please click <a href='{message.Url}'>here</a> to set up your password.<br><br>
+    If the link above doesn't work, please copy and paste the following link in your web browser: {message.Url}<br><br>
+    This link will expire at {message.Expiration.ToString("F")}<br><br>
     Yours sincerely,<br><br>
     Cloud Data Protection
   </p>";
             
             string body = ComposeBody(content);
 
-            await _sender.Send(model.Email, subject, body);
+            await _sender.Send(message.Email, subject, body);
         }
     }
 }

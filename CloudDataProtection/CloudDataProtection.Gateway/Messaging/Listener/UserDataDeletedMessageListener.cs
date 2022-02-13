@@ -2,18 +2,17 @@
 using System.Threading.Tasks;
 using CloudDataProtection.Business;
 using CloudDataProtection.Core.Messaging;
+using CloudDataProtection.Core.Messaging.Dto;
 using CloudDataProtection.Core.Messaging.RabbitMq;
 using CloudDataProtection.Core.Result;
-using CloudDataProtection.Dto.Result;
 using CloudDataProtection.Entities;
-using CloudDataProtection.Messaging.Publisher;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace CloudDataProtection.Messaging.Listener
 {
-    public class UserDataDeletedMessageListener : RabbitMqMessageListener<UserDataDeletedModel>
+    public class UserDataDeletedMessageListener : RabbitMqMessageListener<UserDataDeletedMessage>
     {
         private readonly IServiceScope _scope;
         
@@ -24,34 +23,34 @@ namespace CloudDataProtection.Messaging.Listener
 
         protected override string RoutingKey => RoutingKeys.ClientDataDeleted;
 
-        public override async Task HandleMessage(UserDataDeletedModel model)
+        public override async Task HandleMessage(UserDataDeletedMessage message)
         {
             UserBusinessLogic logic = _scope.ServiceProvider.GetRequiredService<UserBusinessLogic>();
 
             UserDeletionHistoryProgress history = new UserDeletionHistoryProgress
             {
-                ServiceName = model.Service,
-                StartedAt = model.StartedAt,
-                CompletedAt = model.CompletedAt,
+                ServiceName = message.Service,
+                StartedAt = message.StartedAt,
+                CompletedAt = message.CompletedAt,
             };
 
-            BusinessResult<Tuple<UserDeletionHistory, string>> addProgressResult = await logic.AddProgress(history, model.UserId);
+            BusinessResult<Tuple<UserDeletionHistory, string>> addProgressResult = await logic.AddProgress(history, message.UserId);
 
             if (addProgressResult.Success && addProgressResult.Data != null && addProgressResult.Data.Item1.IsComplete)
             {
                 UserDeletionHistory progress = addProgressResult.Data.Item1;
                 string email = addProgressResult.Data.Item2;
                 
-                IMessagePublisher<UserDeletionCompleteModel> publisher =
-                    _scope.ServiceProvider.GetRequiredService<IMessagePublisher<UserDeletionCompleteModel>>();
+                IMessagePublisher<UserDeletionCompleteMessage> publisher =
+                    _scope.ServiceProvider.GetRequiredService<IMessagePublisher<UserDeletionCompleteMessage>>();
 
-                UserDeletionCompleteModel deletionCompleteModel = new UserDeletionCompleteModel
+                UserDeletionCompleteMessage deletionCompleteMessage = new UserDeletionCompleteMessage
                 {
                     UserId = progress.UserId,
                     Email = email
                 };
 
-                await publisher.Send(deletionCompleteModel);
+                await publisher.Send(deletionCompleteMessage);
             }
         }
     }

@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
 using CloudDataProtection.Core.Messaging;
+using CloudDataProtection.Core.Messaging.Dto;
 using CloudDataProtection.Services.MailService.Business;
-using CloudDataProtection.Services.MailService.Dto;
 using CloudDataProtection.Core.Messaging.RabbitMq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace CloudDataProtection.Services.MailService.Messaging.Listener
 {
-    public class ClientRegisteredMessageListener : RabbitMqMessageListener<ClientRegisteredModel>
+    public class ClientRegisteredMessageListener : RabbitMqMessageListener<ClientRegisteredMessage>
     {
         private readonly RegistrationMailLogic _logic;
 
@@ -19,9 +19,9 @@ namespace CloudDataProtection.Services.MailService.Messaging.Listener
 
         protected override string RoutingKey => RoutingKeys.ClientRegistered;
 
-        public override async Task HandleMessage(ClientRegisteredModel model)
+        public override async Task HandleMessage(ClientRegisteredMessage message)
         {
-            await _logic.SendClientRegistered(model.Email);
+            await _logic.SendClientRegistered(message.Email);
         }
     }
 }

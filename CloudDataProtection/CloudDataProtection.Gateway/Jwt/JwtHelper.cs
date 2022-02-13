@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using CloudDataProtection.Core.Jwt;
 using CloudDataProtection.Core.Jwt.Options;
 using CloudDataProtection.Entities;
 using Microsoft.Extensions.Options;

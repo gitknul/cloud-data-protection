@@ -12,9 +12,9 @@ using RabbitMQ.Client.Events;
 
 namespace CloudDataProtection.Core.Messaging.RabbitMq
 {
-    public abstract class RabbitMqMessageListener<TModel> : BackgroundService, IMessageListener<TModel> where TModel : class
+    public abstract class RabbitMqMessageListener<TMessage> : BackgroundService, IMessageListener<TMessage> where TMessage : class
     {
-        private readonly ILogger<RabbitMqMessageListener<TModel>> _logger;
+        private readonly ILogger<RabbitMqMessageListener<TMessage>> _logger;
         private readonly RabbitMqConfiguration _configuration;
 
         protected abstract string RoutingKey { get; }
@@ -50,7 +50,7 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
 
         private readonly string _queue;
 
-        protected RabbitMqMessageListener(IOptions<RabbitMqConfiguration> options, ILogger<RabbitMqMessageListener<TModel>> logger)
+        protected RabbitMqMessageListener(IOptions<RabbitMqConfiguration> options, ILogger<RabbitMqMessageListener<TMessage>> logger)
         {
             _logger = logger;
             _configuration = options.Value;
@@ -60,7 +60,7 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
             Init();
         }
         
-        public abstract Task HandleMessage(TModel model);
+        public abstract Task HandleMessage(TMessage model);
         
         protected sealed override Task ExecuteAsync(CancellationToken cancellationToken)
         {
@@ -88,7 +88,7 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
 
             try
             {
-                TModel model = args.GetModel<TModel>();
+                TMessage model = args.GetModel<TMessage>();
                 
                 await HandleMessage(model);
                 

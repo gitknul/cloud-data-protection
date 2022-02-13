@@ -1,17 +1,15 @@
-using System.Security.Claims;
 using System.Threading.Tasks;
 using CloudDataProtection.Business;
 using CloudDataProtection.Business.Options;
-using CloudDataProtection.Core.Controllers.Data;
 using CloudDataProtection.Core.Cryptography.Generator;
 using CloudDataProtection.Core.DependencyInjection.Extensions;
 using CloudDataProtection.Core.Jwt;
 using CloudDataProtection.Core.Jwt.Options;
 using CloudDataProtection.Core.Messaging;
+using CloudDataProtection.Core.Messaging.Dto;
 using CloudDataProtection.Core.Messaging.RabbitMq;
 using CloudDataProtection.Data;
 using CloudDataProtection.Data.Context;
-using CloudDataProtection.Dto.Result;
 using CloudDataProtection.Email;
 using CloudDataProtection.Jwt;
 using CloudDataProtection.Messaging.Listener;
@@ -32,6 +30,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using EmailChangeRequestedMessage = CloudDataProtection.Messaging.Publisher.EmailChangeRequestedMessage;
+using UserDeletedMessage = CloudDataProtection.Messaging.Publisher.UserDeletedMessage;
 
 namespace CloudDataProtection
 {
@@ -71,12 +71,12 @@ namespace CloudDataProtection
 
             ConfigureAuthentication(services);
             
-            services.AddLazy<IMessagePublisher<AdminRegisteredModel>, AdminRegisteredMessagePublisher>();
-            services.AddLazy<IMessagePublisher<ClientResult>, ClientRegisteredMessagePublisher>();
-            services.AddLazy<IMessagePublisher<PasswordUpdatedModel>, PasswordUpdatedMessagePublisher>();
-            services.AddLazy<IMessagePublisher<UserDeletedModel>, UserDeletedMessagePublisher>();
-            services.AddLazy<IMessagePublisher<UserDeletionCompleteModel>, UserDeletionCompleteMessagePublisher>();
-            services.AddLazy<IMessagePublisher<EmailChangeRequestedModel>, EmailChangeRequestedMessagePublisher>();
+            services.AddLazy<IMessagePublisher<AdminRegisteredMessage>, AdminRegisteredMessagePublisher>();
+            services.AddLazy<IMessagePublisher<ClientRegisteredMessage>, ClientRegisteredMessagePublisher>();
+            services.AddLazy<IMessagePublisher<PasswordUpdatedMessage>, PasswordUpdatedMessagePublisher>();
+            services.AddLazy<IMessagePublisher<UserDeletedMessage>, UserDeletedMessagePublisher>();
+            services.AddLazy<IMessagePublisher<UserDeletionCompleteMessage>, UserDeletionCompleteMessagePublisher>();
+            services.AddLazy<IMessagePublisher<EmailChangeRequestedMessage>, EmailChangeRequestedMessagePublisher>();
             
             services.AddSingleton<ITokenGenerator, OtpGenerator>();
 
