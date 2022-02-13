@@ -12,6 +12,6 @@ namespace CloudDataProtection.Services.Subscription.Messaging.Publisher
         {
         }
 
-        protected override string RoutingKey => RoutingKeys.UserDataDeleted;
+        protected override string RoutingKey => RoutingKeys.ClientDataDeleted;
     }
 }

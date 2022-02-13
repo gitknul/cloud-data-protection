@@ -33,7 +33,7 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
                         UserName = _configuration.UserName,
                         Password = _configuration.Password,
                         VirtualHost = _configuration.VirtualHost,
-                        ClientProvidedName = _type.Name
+                        ClientProvidedName = _queue
                     };
                 }
                 
@@ -70,7 +70,7 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
 
             consumer.Received += async (_ ,args) => await HandleMessage(args);
 
-            _channel.BasicConsume(string.Empty, false, consumer);
+            _channel.BasicConsume(_queue, false, consumer);
 
             return Task.CompletedTask;
         }
@@ -84,30 +84,28 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
 
         private async Task HandleMessage(BasicDeliverEventArgs args)
         {
-            if (args.RoutingKey != RoutingKey)
-            {
-                return;
-            }
-
-            TModel model;
+            _logger.LogInformation("Received message with delivery tag {DeliveryTag}", args.DeliveryTag);
 
             try
             {
-                model = args.GetModel<TModel>();
+                TModel model = args.GetModel<TModel>();
+                
+                await HandleMessage(model);
+                
+                _channel.BasicAck(args.DeliveryTag, false);
             }
             catch (JsonReaderException e)
             {
-                _logger.LogWarning(e, "Could not deserialize received object. Length: {Length}", args.Body.Length);
+                _logger.LogWarning(e, "Could not deserialize message with delivery tag {DeliveryTag}", args.DeliveryTag);
 
-                _channel.BasicReject(args.DeliveryTag, false);
-                return;
+                _channel.BasicNack(args.DeliveryTag, false, true);
             }
-
-            _logger.LogInformation("Handling message with subject {GetSubject} and model {Model}", args.RoutingKey, model);
-
-            await HandleMessage(model);
-            
-            _channel.BasicAck(args.DeliveryTag, false);
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while handling message with delivery tag {DeliveryTag}", args.DeliveryTag);
+                
+                _channel.BasicNack(args.DeliveryTag, false, true);
+            }
         }
 
         private string GetQueueName()
@@ -138,8 +136,8 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
         private void DoInit()
         {
             _channel = Connection.CreateModel();
-            _channel.ExchangeDeclare(_configuration.Exchange, ExchangeType.Fanout, true);
-            
+            _channel.ExchangeDeclare(_configuration.Exchange, ExchangeType.Direct, true);
+
             _channel.QueueDeclare(_queue, exclusive: false, durable: true, autoDelete: false);
             _channel.QueueBind(_queue, _configuration.Exchange, RoutingKey);
         }

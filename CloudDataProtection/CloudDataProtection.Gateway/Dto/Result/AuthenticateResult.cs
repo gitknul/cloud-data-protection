@@ -4,6 +4,6 @@
     {
         public string Token { get; set; }
 
-        public UserResult User { get; set; }
+        public LoginUserResult User { get; set; }
     }
 }

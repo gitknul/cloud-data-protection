@@ -10,7 +10,7 @@ namespace CloudDataProtection.Core.Cryptography.Attributes
 
     public enum DataType
     {
-        Unknown = 0,
+        Other = 0,
         EmailAddress = 100
     }
 }

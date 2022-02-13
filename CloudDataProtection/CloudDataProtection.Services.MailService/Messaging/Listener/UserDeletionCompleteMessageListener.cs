@@ -17,7 +17,8 @@ namespace CloudDataProtection.Services.MailService.Messaging.Listener
             _logic = logic;
         }
 
-        protected override string RoutingKey => RoutingKeys.UserDeletionComplete;
+        protected override string RoutingKey => RoutingKeys.ClientDeletionComplete;
+        
         public override async Task HandleMessage(UserDeletionCompleteModel model)
         {
             await _logic.SendUserDeletionComplete(model.Email);

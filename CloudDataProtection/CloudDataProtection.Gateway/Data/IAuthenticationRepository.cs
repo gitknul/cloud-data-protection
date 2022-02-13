@@ -8,10 +8,17 @@ namespace CloudDataProtection.Data
     {
         Task<User> Get(long id);
         Task<User> Get(string email);
+        Task<ICollection<User>> GetAll(UserRole role);
         Task Update(User user);
 
         Task Create(User user);
         Task Delete(User user);
+
+        Task Create(ResetPasswordRequest request);
+        Task<ResetPasswordRequest> GetResetPasswordRequest(string token);
+        Task<IEnumerable<ResetPasswordRequest>> GetResetPasswordRequests(long userId);
+        Task Update(ResetPasswordRequest request);
+        Task Update(IEnumerable<ResetPasswordRequest> requests);
 
         Task Create(ChangeEmailRequest request);
         Task Update(ChangeEmailRequest request);

@@ -1,6 +1,6 @@
-﻿namespace CloudDataProtection.Services.MailService.Dto
+﻿namespace CloudDataProtection.Dto.Result
 {
-    public class UserRegisteredModel
+    public class ClientResult
     {
         public long Id { get; set; }
         

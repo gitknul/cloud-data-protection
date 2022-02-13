@@ -8,6 +8,7 @@ namespace CloudDataProtection.Data.Context
         DbSet<Entities.User> User { get; set; }
         DbSet<Entities.UserDeletionHistory> UserDeletionHistory { get; set; }
         DbSet<Entities.ChangeEmailRequest> ChangeEmailRequest { get; set; }
+        DbSet<Entities.ResetPasswordRequest> RequestPasswordRequest { get; set; }
 
         Task<bool> SaveAsync();
     }

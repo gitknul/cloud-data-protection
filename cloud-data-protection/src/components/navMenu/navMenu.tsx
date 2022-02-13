@@ -56,6 +56,9 @@ const NavMenu = () => {
             case UserRole.Employee:
                 employeeMenuItems().forEach(link => links.push(link));
                 break;
+            case UserRole.Admin:
+                adminMenuItems().forEach(link => links.push(link));
+                break;
         }
 
         return links;
@@ -79,6 +82,16 @@ const NavMenu = () => {
      */
     const employeeMenuItems = (): NavMenuItem[] => {
         const links: NavMenuItem[] = [];
+
+        links.push({text: 'Settings', route: '/settings', icon: <Settings />})
+
+        return links;
+    }
+
+    const adminMenuItems = (): NavMenuItem[] => {
+        const links: NavMenuItem[] = [];
+
+        links.push({text: 'Settings', route: '/settings', icon: <Settings />})
 
         return links;
     }

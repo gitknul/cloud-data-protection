@@ -4,6 +4,7 @@ using CloudDataProtection.Business;
 using CloudDataProtection.Core.Messaging;
 using CloudDataProtection.Core.Messaging.RabbitMq;
 using CloudDataProtection.Core.Result;
+using CloudDataProtection.Dto.Result;
 using CloudDataProtection.Entities;
 using CloudDataProtection.Messaging.Publisher;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,8 @@ namespace CloudDataProtection.Messaging.Listener
             _scope = serviceScopeFactory.CreateScope();
         }
 
-        protected override string RoutingKey => RoutingKeys.UserDataDeleted;
+        protected override string RoutingKey => RoutingKeys.ClientDataDeleted;
+
         public override async Task HandleMessage(UserDataDeletedModel model)
         {
             UserBusinessLogic logic = _scope.ServiceProvider.GetRequiredService<UserBusinessLogic>();
@@ -52,16 +54,5 @@ namespace CloudDataProtection.Messaging.Listener
                 await publisher.Send(deletionCompleteModel);
             }
         }
-    }
-    
-    public class UserDataDeletedModel
-    {
-        public long UserId { get; set; }
-        
-        public DateTime StartedAt { get; set; }
-        
-        public DateTime CompletedAt { get; set; }
-
-        public string Service { get; set; }
     }
 }

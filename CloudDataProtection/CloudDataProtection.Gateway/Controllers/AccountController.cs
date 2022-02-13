@@ -24,6 +24,7 @@ namespace CloudDataProtection.Controllers
     {
         private readonly Lazy<IMessagePublisher<UserDeletedModel>> _userDeletedMessagePublisher;
         private readonly Lazy<IMessagePublisher<EmailChangeRequestedModel>> _emailChangeRequestedMessagePublisher;
+        private readonly Lazy<IMessagePublisher<PasswordUpdatedModel>> _passwordUpdatedMessagePublisher;
         private readonly ChangeEmailOptions _changeEmailOptions;
         private readonly UserBusinessLogic _userBusinessLogic;
         private readonly AuthenticationBusinessLogic _authenticationBusinessLogic;
@@ -31,12 +32,14 @@ namespace CloudDataProtection.Controllers
         public AccountController(IJwtDecoder jwtDecoder,
             Lazy<IMessagePublisher<UserDeletedModel>> userDeletedMessagePublisher, 
             Lazy<IMessagePublisher<EmailChangeRequestedModel>> emailChangeRequestedMessagePublisher,
+            Lazy<IMessagePublisher<PasswordUpdatedModel>> passwordUpdatedMessagePublisher,
             IOptions<ChangeEmailOptions> changeEmailOptions,
             UserBusinessLogic userBusinessLogic, 
             AuthenticationBusinessLogic authenticationBusinessLogic) : base(jwtDecoder)
         {
             _userDeletedMessagePublisher = userDeletedMessagePublisher;
             _userBusinessLogic = userBusinessLogic;
+            _passwordUpdatedMessagePublisher = passwordUpdatedMessagePublisher;
             _changeEmailOptions = changeEmailOptions.Value;
             _authenticationBusinessLogic = authenticationBusinessLogic;
             _emailChangeRequestedMessagePublisher = emailChangeRequestedMessagePublisher;
@@ -91,18 +94,51 @@ namespace CloudDataProtection.Controllers
         [Route("ChangePassword")]
         public async Task<ActionResult> ChangePassword(ChangePasswordInput input)
         {
-            BusinessResult changePasswordResult = await _authenticationBusinessLogic.ChangePassword(UserId, input.CurrentPassword, input.NewPassword);
+            BusinessResult<User> changePasswordResult = await _authenticationBusinessLogic.ChangePassword(UserId, input.CurrentPassword, input.NewPassword);
             
             if (!changePasswordResult.Success)
             {
                 return Conflict(ConflictResponse.Create(changePasswordResult.Message));
             }
 
+            PasswordUpdatedModel model = new PasswordUpdatedModel
+            {
+                Email = changePasswordResult.Data.Email,
+                UserId = changePasswordResult.Data.Id
+            };
+
+            await _passwordUpdatedMessagePublisher.Value.Send(model);
+
+            return Ok();
+        }
+        
+        [HttpPatch]
+        [Route("ResetPassword")]
+        [AllowAnonymous]
+        public async Task<ActionResult> ResetPassword(ResetPasswordInput input)
+        {
+            BusinessResult<User> updatePasswordResult = await _authenticationBusinessLogic.UpdatePassword(input.Password, input.Token);
+            
+            if (!updatePasswordResult.Success)
+            {
+                return Conflict(ConflictResponse.Create(updatePasswordResult.Message));
+            }
+
+            PasswordUpdatedModel model = new PasswordUpdatedModel
+            {
+                UserId = updatePasswordResult.Data.Id,
+                Email = updatePasswordResult.Data.Email
+            };
+
+            await _passwordUpdatedMessagePublisher.Value.Send(model);
+
             return Ok();
         }
 
+
         [HttpDelete]
         [Route("")]
+        [Authorize(Policy = "ClientOnly")]
         public async Task<ActionResult> Delete()
         {
             BusinessResult<User> getUserResult = await _userBusinessLogic.Get(UserId);

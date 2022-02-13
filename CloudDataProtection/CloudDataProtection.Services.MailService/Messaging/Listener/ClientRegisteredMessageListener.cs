@@ -8,20 +8,20 @@ using Microsoft.Extensions.Options;
 
 namespace CloudDataProtection.Services.MailService.Messaging.Listener
 {
-    public class UserRegisteredMessageListener : RabbitMqMessageListener<UserRegisteredModel>
+    public class ClientRegisteredMessageListener : RabbitMqMessageListener<ClientRegisteredModel>
     {
         private readonly RegistrationMailLogic _logic;
 
-        public UserRegisteredMessageListener(IOptions<RabbitMqConfiguration> options, ILogger<UserRegisteredMessageListener> logger, RegistrationMailLogic logic) : base(options, logger)
+        public ClientRegisteredMessageListener(IOptions<RabbitMqConfiguration> options, ILogger<ClientRegisteredMessageListener> logger, RegistrationMailLogic logic) : base(options, logger)
         {
             _logic = logic;
         }
 
-        protected override string RoutingKey => RoutingKeys.UserRegistered;
+        protected override string RoutingKey => RoutingKeys.ClientRegistered;
 
-        public override async Task HandleMessage(UserRegisteredModel model)
+        public override async Task HandleMessage(ClientRegisteredModel model)
         {
-            await _logic.SendUserRegistered(model.Email);
+            await _logic.SendClientRegistered(model.Email);
         }
     }
 }

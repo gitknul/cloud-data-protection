@@ -54,6 +54,39 @@ namespace CloudDataProtection.Migrations
                     b.ToTable("ChangeEmailRequest");
                 });
 
+            modelBuilder.Entity("CloudDataProtection.Entities.ResetPasswordRequest", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime?>("ConfirmedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("InvalidatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ResetPasswordRequest");
+                });
+
             modelBuilder.Entity("CloudDataProtection.Entities.User", b =>
                 {
                     b.Property<long>("Id")
@@ -61,11 +94,17 @@ namespace CloudDataProtection.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("PasswordSetAt")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Role")
                         .HasColumnType("integer");
@@ -126,6 +165,17 @@ namespace CloudDataProtection.Migrations
                     b.HasIndex("UserDeletionHistoryId");
 
                     b.ToTable("UserDeletionHistoryProgress");
+                });
+
+            modelBuilder.Entity("CloudDataProtection.Entities.ResetPasswordRequest", b =>
+                {
+                    b.HasOne("CloudDataProtection.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CloudDataProtection.Entities.UserDeletionHistoryProgress", b =>

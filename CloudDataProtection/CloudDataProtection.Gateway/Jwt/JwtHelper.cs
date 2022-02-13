@@ -30,7 +30,7 @@ namespace CloudDataProtection.Jwt
                 {
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(CustomClaimTypes.UserRole, ((int) user.Role).ToString()),
+                    new Claim(ClaimTypes.Role, ((int) user.Role).ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddDays(ExpirationTimeDays),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_options.Key), SecurityAlgorithms.HmacSha256Signature)

@@ -47,8 +47,9 @@ namespace CloudDataProtection.Gateway.Tests.Business
                 .Returns(Task.CompletedTask);
 
             IOptions<ChangeEmailOptions> changeEmailOptions = Options.Create(new ChangeEmailOptions() {ExpiresInMinutes = 15});
+            IOptions<ResetPasswordOptions> resetPasswordOptions = Options.Create(new ResetPasswordOptions() {ExpiresInMinutes = 15});
             
-            _logic = new AuthenticationBusinessLogic(mock.Object, new BCryptPasswordHasher(), changeEmailOptions, new OtpGenerator());
+            _logic = new AuthenticationBusinessLogic(mock.Object, new BCryptPasswordHasher(), changeEmailOptions, resetPasswordOptions, new OtpGenerator());
         }
 
         #region Valid credentials

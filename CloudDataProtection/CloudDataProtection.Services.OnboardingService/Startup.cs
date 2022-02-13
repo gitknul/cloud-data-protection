@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using AutoMapper;
+using CloudDataProtection.Core.Controllers.Data;
 using CloudDataProtection.Core.Cryptography.Generator;
 using CloudDataProtection.Core.DependencyInjection.Extensions;
 using CloudDataProtection.Core.Jwt;
@@ -19,6 +21,7 @@ using CloudDataProtection.Services.Onboarding.Messaging.Listener;
 using CloudDataProtection.Services.Onboarding.Messaging.Publisher;
 using CloudDataProtection.Services.Onboarding.Messaging.Publisher.Dto;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -71,6 +74,7 @@ namespace CloudDataProtection.Services.Onboarding
             services.Configure<RabbitMqConfiguration>(options => Configuration.GetSection("RabbitMq").Bind(options));
             services.Configure<OnboardingOptions>(options => Configuration.GetSection("Google:Onboarding").Bind(options));
 
+            services.AddHostedService<ClientRegisteredMessageListener>();
             services.AddHostedService<BackupConfigurationEnteredMessageListener>();
             services.AddHostedService<UserDeletedMessageListener>();
 
@@ -105,29 +109,8 @@ namespace CloudDataProtection.Services.Onboarding
 
         private void ConfigureAuthentication(IServiceCollection services)
         {
-            JwtSecretOptions options = new JwtSecretOptions();
-            
-            Configuration.GetSection("Jwt").Bind(options);
-            
-            services.AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(options.Key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
-
-            services.AddScoped<IJwtDecoder, JwtDecoder>();
+            services.ConfigureAuthentication(Configuration);
+            services.ConfigureAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using CloudDataProtection.Core.Cryptography.Attributes;
 using CloudDataProtection.Core.Entities;
@@ -18,5 +19,9 @@ namespace CloudDataProtection.Entities
         public string Password { get; set; }
         
         public UserRole Role { get; set; }
+        
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public DateTime? PasswordSetAt { get; set; }
     }
 }

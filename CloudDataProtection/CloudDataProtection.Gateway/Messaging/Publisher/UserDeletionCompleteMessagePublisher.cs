@@ -11,7 +11,7 @@ namespace CloudDataProtection.Messaging.Publisher
         {
         }
 
-        protected override string RoutingKey => RoutingKeys.UserDeletionComplete;
+        protected override string RoutingKey => RoutingKeys.ClientDeletionComplete;
     }
 
     public class UserDeletionCompleteModel

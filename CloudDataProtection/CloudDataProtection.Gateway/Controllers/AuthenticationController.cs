@@ -19,10 +19,10 @@ namespace CloudDataProtection.Controllers
     {
         private readonly AuthenticationBusinessLogic _logic;
         private readonly IJwtHelper _jwtHelper;
-        private readonly Lazy<IMessagePublisher<UserResult>> _messagePublisher;
+        private readonly Lazy<IMessagePublisher<ClientResult>> _messagePublisher;
 
         public AuthenticationController(AuthenticationBusinessLogic logic, IJwtHelper jwtHelper, 
-            Lazy<IMessagePublisher<UserResult>> messagePublisher)
+            Lazy<IMessagePublisher<ClientResult>> messagePublisher)
         {
             _logic = logic;
             _jwtHelper = jwtHelper;
@@ -44,7 +44,7 @@ namespace CloudDataProtection.Controllers
 
             AuthenticateResult result = new AuthenticateResult
             {
-                User = new UserResult
+                User = new LoginUserResult
                 {
                     Email = user.Email,
                     Id = user.Id,
@@ -60,32 +60,28 @@ namespace CloudDataProtection.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] RegisterInput model)
         {
-            User user = new User()
+            User user = new User
             {
                 Email = model.Email,
                 Role = UserRole.Client
             };
 
-            // create user
             BusinessResult<User> businessResult = await _logic.Create(user, model.Password);
 
-            if (businessResult.Success)
+            if (!businessResult.Success)
             {
-                UserResult result = new UserResult
-                {
-                    Email = user.Email,
-                    Id = user.Id,
-                    Role = user.Role
-                };
+                return Conflict(ConflictResponse.Create(businessResult.Message));
+            }
+            
+            ClientResult result = new ClientResult
+            {
+                Email = user.Email,
+                Id = user.Id
+            };
 
-                await _messagePublisher.Value.Send(result);
-                
-                return Ok(result);
-            }
-            else
-            {
-                return Conflict(businessResult.Message);
-            }
+            await _messagePublisher.Value.Send(result);
+            
+            return Ok(result);
         }
     }
 }

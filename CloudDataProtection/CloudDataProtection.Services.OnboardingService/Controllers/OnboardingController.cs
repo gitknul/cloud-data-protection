@@ -12,6 +12,7 @@ using CloudDataProtection.Services.Onboarding.Dto;
 using CloudDataProtection.Services.Onboarding.Entities;
 using CloudDataProtection.Services.Onboarding.Messaging.Client.Dto;
 using CloudDataProtection.Services.Onboarding.Messaging.Publisher.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -19,6 +20,7 @@ namespace CloudDataProtection.Services.Onboarding.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Policy = "ClientOnly")]
     public class OnboardingController : ServiceController
     {
         private readonly Lazy<OnboardingBusinessLogic> _logic;

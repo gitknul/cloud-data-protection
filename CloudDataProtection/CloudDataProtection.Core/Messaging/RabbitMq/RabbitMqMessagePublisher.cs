@@ -102,7 +102,7 @@ namespace CloudDataProtection.Core.Messaging.RabbitMq
         private void DoInit()
         {
             _channel = Connection.CreateModel();
-            _channel.ExchangeDeclare(_configuration.Exchange, ExchangeType.Fanout, true);
+            _channel.ExchangeDeclare(_configuration.Exchange, ExchangeType.Direct, true);
         }
     }
 }

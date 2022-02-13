@@ -10,6 +10,7 @@ const AnonymousRouter = () => {
         <Fragment>
             <Route exact path='/login' component={Login}/>
             <Route exact path='/register' component={Register}/>
+            {/*Use onboarding path with loading component, so the user won't be redirected to the home page after authenticating Google*/}
             <Route exact path='/onboarding' component={Loading} />
             <Route exact path='/' component={Home}/>
         </Fragment>

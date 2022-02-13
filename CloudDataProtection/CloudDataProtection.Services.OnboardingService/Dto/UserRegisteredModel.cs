@@ -13,6 +13,7 @@ namespace CloudDataProtection.Services.Onboarding.Dto
     public enum UserRegisteredRole
     {
         Client = 0,
-        Employee = 1
+        Employee = 1,
+        Admin = 2
     }
 }

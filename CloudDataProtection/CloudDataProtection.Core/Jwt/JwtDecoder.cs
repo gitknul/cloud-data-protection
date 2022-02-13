@@ -71,7 +71,7 @@ namespace CloudDataProtection.Core.Jwt
         private static UserRole? GetUserRole(IEnumerable<Claim> claims)
         {
             return claims
-                .Where(c => c.Type == CustomClaimTypes.UserRole)
+                .Where(c => c.Type == ClaimTypes.Role)
                 .Select(claim => claim.Value)
                 .Select(value => int.TryParse(value, out int role) ? (UserRole) role : null as UserRole?)
                 .FirstOrDefault();

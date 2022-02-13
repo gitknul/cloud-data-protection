@@ -1,13 +1,15 @@
-﻿using CloudDataProtection.Entities;
+using System;
 
 namespace CloudDataProtection.Dto.Result
 {
-    public class UserResult
+    public class AdminRegisteredModel
     {
         public long Id { get; set; }
         
         public string Email { get; set; }
         
-        public UserRole Role { get; set; }
+        public string Url { get; set; }
+        
+        public DateTime Expiration { get; set; }
     }
 }

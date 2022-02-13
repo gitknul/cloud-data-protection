@@ -11,7 +11,7 @@ namespace CloudDataProtection.Messaging.Publisher
         {
         }
 
-        protected override string RoutingKey => RoutingKeys.UserDeleted;
+        protected override string RoutingKey => RoutingKeys.ClientDeleted;
     }
     
     public class UserDeletedModel

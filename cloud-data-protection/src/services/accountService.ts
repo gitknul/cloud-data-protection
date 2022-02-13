@@ -2,6 +2,7 @@ import {ServiceBase} from "services/base/serviceBase";
 import {AxiosResponse, CancelToken} from "axios";
 import {logout, changeEmail} from "features/userSlice";
 import {http} from "common/http";
+import ResetPasswordInput from "services/input/account/resetPasswordInput";
 import store from "stores/Store";
 import ChangeEmailInput from "./input/account/changeEmailInput";
 import ConfirmChangeEmailInput from "services/input/account/confirmChangeEmailInput";
@@ -22,6 +23,11 @@ export class AccountService extends ServiceBase {
 
     public async changePassword(input: ChangePasswordInput, cancelToken?: CancelToken) {
         return await http.patch('/Account/ChangePassword', input, { cancelToken: cancelToken })
+            .catch((e: any) => this.onError(e));
+    }
+
+    public async resetPassword(input: ResetPasswordInput, cancelToken?: CancelToken) {
+        return await http.patch('/Account/ResetPassword', input, { cancelToken: cancelToken })
             .catch((e: any) => this.onError(e));
     }
 

@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using System.Threading.Tasks;
 using CloudDataProtection.Business;
 using CloudDataProtection.Business.Options;
+using CloudDataProtection.Core.Controllers.Data;
 using CloudDataProtection.Core.Cryptography.Generator;
 using CloudDataProtection.Core.DependencyInjection.Extensions;
 using CloudDataProtection.Core.Jwt;
@@ -18,6 +20,7 @@ using CloudDataProtection.Messaging.Server;
 using CloudDataProtection.Ocelot;
 using CloudDataProtection.Ocelot.Swagger;
 using CloudDataProtection.Password;
+using CloudDataProtection.Seeder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -68,7 +71,9 @@ namespace CloudDataProtection
 
             ConfigureAuthentication(services);
             
-            services.AddLazy<IMessagePublisher<UserResult>, UserRegisteredMessagePublisher>();
+            services.AddLazy<IMessagePublisher<AdminRegisteredModel>, AdminRegisteredMessagePublisher>();
+            services.AddLazy<IMessagePublisher<ClientResult>, ClientRegisteredMessagePublisher>();
+            services.AddLazy<IMessagePublisher<PasswordUpdatedModel>, PasswordUpdatedMessagePublisher>();
             services.AddLazy<IMessagePublisher<UserDeletedModel>, UserDeletedMessagePublisher>();
             services.AddLazy<IMessagePublisher<UserDeletionCompleteModel>, UserDeletionCompleteMessagePublisher>();
             services.AddLazy<IMessagePublisher<EmailChangeRequestedModel>, EmailChangeRequestedMessagePublisher>();
@@ -78,10 +83,13 @@ namespace CloudDataProtection
             services.AddScoped<IUserHistoryRepository, UserHistoryRepository>();
 
             services.AddTransient<UserBusinessLogic>();
+            services.AddTransient<AdminSeeder>();
 
             services.Configure<RabbitMqConfiguration>(options => Configuration.GetSection("RabbitMq").Bind(options));
             services.Configure<JwtSecretOptions>(options => Configuration.GetSection("Jwt").Bind(options));
             services.Configure<ChangeEmailOptions>(options => Configuration.GetSection("ChangeEmail").Bind(options));
+            services.Configure<ResetPasswordOptions>(options => Configuration.GetSection("ResetPassword").Bind(options));
+            services.Configure<AdminSeederOptions>(options => Configuration.GetSection("Admin").Bind(options));
 
             services.AddHostedService<GetUserEmailRpcServer>();
             services.AddHostedService<UserDataDeletedMessageListener>();
@@ -119,10 +127,15 @@ namespace CloudDataProtection
             services.AddEncryptedDbContext<IAuthenticationDbContext, AuthenticationDbContext>
                 (Configuration, o => o.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
+            JwtBearerEvents events = new JwtBearerEvents
+            {
+                OnTokenValidated = OnTokenValidated
+            };
+
             JwtSecretOptions options = new JwtSecretOptions();
             
             Configuration.GetSection("Jwt").Bind(options);
-            
+
             services.AddAuthentication(x =>
                 {
                     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -130,10 +143,7 @@ namespace CloudDataProtection
                 })
                 .AddJwtBearer(x =>
                 {
-                    x.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = OnTokenValidated
-                    };
+                    x.Events = events;
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
                     x.TokenValidationParameters = new TokenValidationParameters
@@ -145,11 +155,14 @@ namespace CloudDataProtection
                     };
                 });
             
+            services.AddScoped<IJwtDecoder, JwtDecoder>();
+
+            services.ConfigureAuthorization();
+
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<AuthenticationBusinessLogic>();
             
             services.AddScoped<IJwtHelper, JwtHelper>();
-            services.AddScoped<IJwtDecoder, JwtDecoder>();
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<IEmailHasher, BCryptEmailHasher>();
 

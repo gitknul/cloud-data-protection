@@ -8,12 +8,14 @@ using CloudDataProtection.Core.Result;
 using CloudDataProtection.Services.Subscription.Business;
 using CloudDataProtection.Services.Subscription.Dto;
 using CloudDataProtection.Services.Subscription.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudDataProtection.Services.Subscription.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Policy = "ClientOnly")]
     public class BackupSchemeController : ServiceController
     {
         private readonly Lazy<BackupSchemeBusinessLogic> _logic;

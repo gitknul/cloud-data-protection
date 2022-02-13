@@ -1,4 +1,6 @@
 import {Button, Typography} from "@material-ui/core";
+import UserRole from "entities/userRole";
+import {selectUser} from "features/userSlice";
 import React, {useState} from "react";
 import DeleteAccount from "components/settings/account/modal/deleteAccount";
 import './accountSettings.css';
@@ -27,6 +29,7 @@ const AccountSettings = () => {
     const history = useHistory();
 
     const loading = useSelector(selectLoading);
+    const user = useSelector(selectUser);
 
     const {enqueueSnackbar} = useSnackbar();
 
@@ -145,16 +148,18 @@ const AccountSettings = () => {
                     <ChangePassword onClose={onChangePasswordClose} onSubmit={onChangePasswordSubmit} loading={isChangePasswordLoading} />
                 }
             </div>
-            <div className='account-settings__section account-settings__delete'>
-                <Typography variant='h5'>Delete account</Typography>
-                <p>If you don't want to use the services of Cloud Data Protection, you can delete your account. All your personal data will be deleted, leaving no trace at all.</p>
-                <Button className='account-settings__section__btn' variant='contained' color='secondary' onClick={onDeleteAccountClick} disabled={loading}>
-                    Delete my account
-                </Button>
-                {isDeleteAccountVisible &&
-                    <DeleteAccount onClose={onDeleteAccountClose} onSubmit={onDeleteAccountSubmit} loading={isDeleteAccountLoading} />
-                }
-            </div>
+            {user.role === UserRole.Client &&
+                <div className='account-settings__section account-settings__delete'>
+                    <Typography variant='h5'>Delete account</Typography>
+                    <p>If you don't want to use the services of Cloud Data Protection, you can delete your account. All your personal data will be deleted, leaving no trace at all.</p>
+                    <Button className='account-settings__section__btn' variant='contained' color='secondary' onClick={onDeleteAccountClick} disabled={loading}>
+                        Delete my account
+                    </Button>
+                    {isDeleteAccountVisible &&
+                        <DeleteAccount onClose={onDeleteAccountClose} onSubmit={onDeleteAccountSubmit} loading={isDeleteAccountLoading} />
+                    }
+                </div>
+            }
         </div>
     )
 }

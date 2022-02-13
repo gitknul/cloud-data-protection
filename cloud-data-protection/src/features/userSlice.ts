@@ -14,7 +14,7 @@ const initialState: UserSliceState = ({
 })
 
 const user = localStorage.getItem('user') as string;
-const token = localStorage.getItem('token')
+const token = localStorage.getItem('token');
 
 if (user && token) {
     initialState.user = JSON.parse(user);

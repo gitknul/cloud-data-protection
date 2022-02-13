@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using AutoMapper;
+using CloudDataProtection.Core.Controllers.Data;
 using CloudDataProtection.Core.DependencyInjection.Extensions;
 using CloudDataProtection.Core.Jwt;
 using CloudDataProtection.Core.Jwt.Options;
@@ -116,32 +118,11 @@ namespace CloudDataProtection.Services.Subscription
                 .ForPath(p => p.Time.Seconds,
                     options => options.MapFrom(s => s.Time.Seconds));
         }
-
+        
         private void ConfigureAuthentication(IServiceCollection services)
         {
-            JwtSecretOptions options = new JwtSecretOptions();
-            
-            Configuration.GetSection("Jwt").Bind(options);
-            
-            services.AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(options.Key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
-
-            services.AddScoped<IJwtDecoder, JwtDecoder>();
+            services.ConfigureAuthentication(Configuration);
+            services.ConfigureAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -54,7 +54,7 @@ namespace CloudDataProtection.Core.Data.Context
                             case DataType.EmailAddress:
                                 property.SetValueConverter(new AesEmailConverter(_transformer));
                                 break;
-                            case DataType.Unknown:
+                            case DataType.Other:
                                 property.SetValueConverter(new AesValueConverter(_transformer));
                                 break;
                         }
