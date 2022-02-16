@@ -67,7 +67,10 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Listeners\RecyclerViewOnScrollListener.cs" />
+    <Compile Include="NameDetailActivity.cs" />
+    <Compile Include="Intents\IntentExtras.cs" />
+    <Compile Include="Extensions\IntentExtensions.cs" />
+    <Compile Include="Intents\Extras\NameExtra.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -105,11 +108,18 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
     <AndroidResource Include="Resources\drawable\border_bottom.xml" />
     <AndroidResource Include="Resources\drawable\border_top.xml" />
+    <AndroidResource Include="Resources\drawable\icon_warning.xml" />
+    <AndroidResource Include="Resources\drawable\rounded_corners.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_name_unavailable.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
-    <Folder Include="Listeners\" />
     <Folder Include="Assets\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Intents\Extras\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.4.0.4" />

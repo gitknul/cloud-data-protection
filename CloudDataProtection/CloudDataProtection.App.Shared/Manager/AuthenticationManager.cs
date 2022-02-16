@@ -1,4 +1,3 @@
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
@@ -37,12 +36,6 @@ namespace CloudDataProtection.App.Shared.Manager
         public async Task SaveToken(string token)
         {
             await SecureStorage.SetAsync(TokenKey, token);
-        }
-
-        // TODO
-        public void RemoveToken()
-        {
-            Token = null;
         }
     }
 }

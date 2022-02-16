@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:background="@color/bg_secondary"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:padding="32dp">
+	<RelativeLayout
+		android:background="@drawable/rounded_corners"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:padding="16dp">
+
+		<ImageView
+			android:id="@+id/ErrorImageView"
+			android:layout_marginTop="32dp"
+			android:layout_width="64dp"
+			android:layout_height="64dp"
+			android:layout_centerHorizontal="true"
+			android:background="@drawable/icon_warning"
+			android:contentDescription="Error" />
+
+		<TextView
+			android:id="@+id/ErrorDescriptionTextView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@+id/ErrorImageView"
+			android:layout_marginTop="32dp"
+			android:textAlignment="center"
+			android:textSize="20sp"
+			android:lineHeight="25sp"
+			tools:text="Deze klus is helaas niet meer beschikbaar."/>
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/CloseButton"
+			style="@style/ButtonSecondary"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@+id/ErrorDescriptionTextView"
+			android:layout_marginTop="32dp"
+			android:text="Sluiten" />
+
+	</RelativeLayout>
+</RelativeLayout>

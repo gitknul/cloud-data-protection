@@ -3,13 +3,18 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.App;
+using Android.Content;
 using Android.OS;
 using Android.Widget;
 using AndroidX.RecyclerView.Widget;
 using AndroidX.SwipeRefreshLayout.Widget;
+using CloudDataProtection.App.Android.Intents;
 using CloudDataProtection.App.Android.Adapters;
 using CloudDataProtection.App.Shared.ViewModels;
+using Newtonsoft.Json;
 using ReactiveUI;
+using CloudDataProtection.App.Android.Intents.Extras;
+using CloudDataProtection.App.Android.Extensions;
 
 namespace CloudDataProtection.App.Android
 {
@@ -43,7 +48,7 @@ namespace CloudDataProtection.App.Android
             {
                 this.WhenAnyValue(v => v.ViewModel.Rows)
                     .Where(rows => rows != null)
-                    .Select(rows => Adapter = new NameAdapter(rows))
+                    .Select(rows => Adapter = new NameAdapter(rows, HandleNameClick))
                     .Subscribe(InitializeNameRecylerView)
                     .DisposeWith(d);
 
@@ -53,6 +58,17 @@ namespace CloudDataProtection.App.Android
                 ViewModel.Search.IsExecuting.Subscribe(OnSearchIsExecuting);
                 ViewModel.Search.ThrownExceptions.Subscribe(OnSearchThrownExceptions);
             });
+        }
+
+        private void HandleNameClick(NameViewModel viewModel)
+        {
+            NameExtra extra = new NameExtra(viewModel.Name);
+
+            Intent intent = new Intent(this, typeof(NameUnavailableActivity));
+
+            intent.PutExtra<NameExtra>(IntentExtras.NameExtra, extra);
+
+            StartActivity(intent);
         }
 
         private void InitializeNameRecylerView(NameAdapter adapter)
@@ -87,9 +103,6 @@ namespace CloudDataProtection.App.Android
         public void OnRefresh()
         {
             SwipeContainer.Refreshing = false;
-
-            // TODO | Vragen aan Gerard: wanneer gebruik je Observable.Return.InvokeCommand en wanneer Observable.Start.Subscribe?
-            // In dit voorbeeld werkt Observable.Return.InvokeCommand wel en Observable.Start.Subscribe niet
 
             Observable.Return(Unit.Default).InvokeCommand(ViewModel.Search);
         }

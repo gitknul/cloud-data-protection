@@ -38,6 +38,13 @@ namespace CloudDataProtection.Controllers
                     .ToList()
             });
         }
+
+        [HttpGet("Details")]
+        public ActionResult Details(string text)
+        {
+            // Always return 404
+            return new NotFoundResult();
+        }
     }
 
     public static class Shuffler

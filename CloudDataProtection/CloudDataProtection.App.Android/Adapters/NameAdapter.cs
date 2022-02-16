@@ -1,4 +1,8 @@
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using Android.Views;
 using Android.Widget;
 using AndroidX.RecyclerView.Widget;
@@ -13,25 +17,35 @@ namespace CloudDataProtection.App.Android.Adapters
     {
         public override int ItemCount => backingList.Count;
 
-        private readonly ReadOnlyObservableCollection<NameViewModel> backingList;
+        readonly ReadOnlyObservableCollection<NameViewModel> backingList;
 
-        public NameAdapter(ReadOnlyObservableCollection<NameViewModel> backingList) : base(backingList.ToObservableChangeSet())
+        readonly Action<NameViewModel> itemSelected;
+
+        public NameAdapter(ReadOnlyObservableCollection<NameViewModel> backingList, Action<NameViewModel> itemSelected) : base(backingList.ToObservableChangeSet())
         {
             this.backingList = backingList;
+            this.itemSelected = itemSelected;
         }
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            var view = LayoutInflater.FromContext (parent.Context).Inflate (Resource.Layout.view_name, parent, false);
-            
-            return new NameViewHolder (view);
+            var view = LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.view_name, parent, false);
+
+            var viewHolder = new NameViewHolder(view);
+
+            viewHolder.Selected
+                .Select(i => backingList.ElementAt(i))
+                .Subscribe(itemSelected);
+
+            return viewHolder;
         }
     }
 
     public class NameViewHolder : ReactiveRecyclerViewViewHolder<NameViewModel>
     {
-        private TextView NameTextView { get; set; }
-        
+        public TextView NameTextView { get; set; }
+
+
         public NameViewHolder(View view) : base(view)
         {
             this.WireUpControls();
