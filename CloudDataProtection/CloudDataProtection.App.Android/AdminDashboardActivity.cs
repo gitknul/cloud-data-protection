@@ -17,20 +17,11 @@ namespace CloudDataProtection.App.Android
     public class AdminDashboardActivity : ReactiveActivity<AdminDashboardViewModel>, SwipeRefreshLayout.IOnRefreshListener
     {
         RecyclerView NameRecyclerView { get; set; }
-
         EditText SearchEditText { get; set; }
-
         LinearLayoutManager LayoutManager { get; set; }
-
-        // TODO
-        NameAdapter _adapter;
-        public NameAdapter Adapter
-        {
-            get => _adapter;
-            set => this.RaiseAndSetIfChanged(ref _adapter, value);
-        }
-
         SwipeRefreshLayout SwipeContainer { get; set; }
+
+        NameAdapter Adapter { get; set; }
 
         Toast loadingToast;
 
