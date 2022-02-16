@@ -23,7 +23,9 @@
         </None>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\CloudDataProtection.Core\CloudDataProtection.Core.csproj" />
+      <ProjectReference Include="..\CloudDataProtection.Core\CloudDataProtection.Core.csproj">
+        <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+      </ProjectReference>
     </ItemGroup>
     <ItemGroup>
       <None Remove="appsettings.json" />

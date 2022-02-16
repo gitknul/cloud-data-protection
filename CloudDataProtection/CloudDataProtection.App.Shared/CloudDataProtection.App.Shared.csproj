@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ReactiveUI" />
+    <None Remove="ViewModels\" />
+    <None Remove="Rest\" />
+    <None Remove="Flurl" />
+    <None Remove="Flurl.Http" />
+    <None Remove="Refit" />
+    <None Remove="Xamarin.Essentials" />
+    <None Remove="Manager\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Refit" Version="6.3.2" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.1" />
+    <PackageReference Include="ReactiveUI" Version="16.3.10" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+    <Folder Include="Rest\" />
+    <Folder Include="Manager\" />
+  </ItemGroup>
+</Project>

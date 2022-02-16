@@ -15,11 +15,11 @@ namespace CloudDataProtection.Core.DependencyInjection.Extensions
                 
                 TDbContextImplementation context = scope.ServiceProvider.GetRequiredService<TDbContext>() as TDbContextImplementation;
                 
-                logger.LogInformation("Running migrations on {DbContext}", context.GetType().Name);
+                logger.LogInformation("Running migrations on {DbContext}", typeof(TDbContext).Name);
 
                 context.Database.Migrate();
                 
-                logger.LogInformation("Completed migrations on {DbContext}", context.GetType().Name);
+                logger.LogInformation("Completed migrations on {DbContext}", typeof(TDbContext).Name);
             }
 
             return webHost;

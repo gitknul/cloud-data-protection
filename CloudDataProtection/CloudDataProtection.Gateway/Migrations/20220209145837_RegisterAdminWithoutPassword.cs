@@ -20,8 +20,8 @@ namespace CloudDataProtection.Migrations
                 type: "timestamp without time zone",
                 nullable: true);
             
-            migrationBuilder.Sql("UPDATE \"User\" SET \"CreatedAt\" = NOW()");
-            migrationBuilder.Sql("UPDATE \"User\" SET \"PasswordSetAt\" = NOW()");
+            // migrationBuilder.Sql("UPDATE \"User\" SET \"CreatedAt\" = NOW()");
+            // migrationBuilder.Sql("UPDATE \"User\" SET \"PasswordSetAt\" = NOW()");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -39,14 +39,19 @@ namespace CloudDataProtection.Migrations
             
             using (AuthenticationDbContext context = new AuthenticationDbContext(builder.Options, transformer))
             {
-                List<User> allUsers = context.User.ToList();
-                
-                allUsers.ForEach(u =>
-                {
-                    context.Entry(u).State = EntityState.Modified;
-                });
+                int count = context.User.Count();
 
-                context.SaveChanges();
+                if (count > 0)
+                {
+                    List<User> allUsers = context.User.ToList();
+
+                    allUsers.ForEach(u =>
+                    {
+                        context.Entry(u).State = EntityState.Modified;
+                    });
+
+                    context.SaveChanges();
+                }
             }
         }
 
