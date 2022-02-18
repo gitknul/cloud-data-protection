@@ -5,6 +5,8 @@ using System.Reactive.Threading.Tasks;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using CloudDataProtection.App.Shared.Rest;
+using CloudDataProtection.App.Shared.Storage;
+using Freshheads.Storage;
 using Newtonsoft.Json;
 using Refit;
 using ReactiveUI;
@@ -51,20 +53,18 @@ namespace CloudDataProtection.App.Shared.Manager
         public IObservable<LoginUserOutput> Login(AuthenticateInput input)
         {
             return _api.Authenticate(input)
-                .Do(SaveUserDetails)
+                .Do(output => SaveUserDetails(output.User))
                 .Do(SaveToken)
                 .Select(o => o.User);
         }
 
-        private async void SaveUserDetails(AuthenticateOutput output)
+        private async void SaveUserDetails(LoginUserOutput user)
         {
-            string json = JsonConvert.SerializeObject(output.User);
+            await Freshheads.Storage.Storage.SetAsync(StorageKeys.User, user, StorageType.Preferences);
 
-            await SecureStorage.SetAsync(UserKey, json);
-            
-            Id = output.User.Id;
-            Email = output.User.Email;
-            Role = output.User.Role;
+            Id = user.Id;
+            Email = user.Email;
+            Role = user.Role;
         }
 
         private async void SaveToken(AuthenticateOutput output)

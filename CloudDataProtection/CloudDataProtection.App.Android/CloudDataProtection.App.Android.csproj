@@ -67,7 +67,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NameDetailActivity.cs" />
+    <Compile Include="NameUnavailableActivity.cs" />
     <Compile Include="Intents\IntentExtras.cs" />
     <Compile Include="Extensions\IntentExtensions.cs" />
     <Compile Include="Intents\Extras\NameExtra.cs" />

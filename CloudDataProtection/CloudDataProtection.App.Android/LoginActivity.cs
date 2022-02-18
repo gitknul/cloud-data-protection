@@ -49,9 +49,6 @@ namespace CloudDataProtection.App.Android
                 case UserRole.Admin:
                     StartActivity(typeof(AdminDashboardActivity));
                     break;
-                case UserRole.Client:
-                    StartActivity(typeof(ClientDashboardActivity));
-                    break;
                 default:
                     throw new Exception("Unknown user role");
             }

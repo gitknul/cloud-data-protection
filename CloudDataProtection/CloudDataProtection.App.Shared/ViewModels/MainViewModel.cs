@@ -1,13 +1,16 @@
 using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using CloudDataProtection.App.Shared.Rest;
-using Newtonsoft.Json;
+using CloudDataProtection.App.Shared.Storage;
+using Freshheads.Storage;
 using ReactiveUI;
 using Xamarin.Essentials;
 
 namespace CloudDataProtection.App.Shared.ViewModels
 {
-    public class MainViewModel : ReactiveObject
+    public class MainViewModel : ReactiveObject, IActivatableViewModel
     {
         private LoginUserOutput _user;
         public LoginUserOutput User
@@ -16,31 +19,25 @@ namespace CloudDataProtection.App.Shared.ViewModels
             set => this.RaiseAndSetIfChanged(ref _user, value);
         }
         
-        private bool? _loggedIn;
-        public bool? LoggedIn
-        {
-            get => _loggedIn;
-            set => this.RaiseAndSetIfChanged(ref _loggedIn, value);
-        }
-
 
         public MainViewModel()
         {
-            SecureStorage.GetAsync("user").ToObservable()
-                .Subscribe(HandleUser);
+            this.WhenActivated(d =>
+            {
+                Freshheads.Storage.Storage.GetAsync<LoginUserOutput>(StorageKeys.User, null, StorageType.Preferences).ToObservable()
+                    .Subscribe(HandleUser)
+                    .DisposeWith(d);
+            });
         }
 
-        private void HandleUser(string json)
+        private void HandleUser(LoginUserOutput output)
         {
-            if (json != null)
+            if (output != null && output.Id != 0)
             {
-                User = JsonConvert.DeserializeObject<LoginUserOutput>(json);
-                LoggedIn = true;
-            }
-            else
-            {
-                LoggedIn = false;
+                User = output;
             }
         }
+
+        public ViewModelActivator Activator { get; } = new ViewModelActivator();
     }
 }

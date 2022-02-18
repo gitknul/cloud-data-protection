@@ -1,5 +1,8 @@
+using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using CloudDataProtection.App.Shared.Storage;
+using Freshheads.Storage;
 using ReactiveUI;
 using Xamarin.Essentials;
 
@@ -7,8 +10,6 @@ namespace CloudDataProtection.App.Shared.Manager
 {
     public class AuthenticationManager : ReactiveObject
     {
-        private const string TokenKey = "jwt";
-        
         private static AuthenticationManager _instance;
         public static AuthenticationManager Instance => _instance ??= new AuthenticationManager();
 
@@ -35,7 +36,7 @@ namespace CloudDataProtection.App.Shared.Manager
         
         public async Task SaveToken(string token)
         {
-            await SecureStorage.SetAsync(TokenKey, token);
+            await Freshheads.Storage.Storage.SetAsync(StorageKeys.Jwt, token, StorageType.Preferences);
         }
     }
 }

@@ -25,23 +25,22 @@ namespace CloudDataProtection.App.Android
 
             this.WhenActivated(d =>
             {
-                this.WhenAnyValue(a => a.ViewModel.LoggedIn, a => a.ViewModel.User, (loggedIn, user) => (LoggedIn: loggedIn, User: user))
-                    .Where(tuple => tuple.LoggedIn.HasValue)
+                this.WhenAnyValue(a => a.ViewModel.User)
                     // ReSharper disable once PossibleInvalidOperationException
                     // We already check with HasValue in this sequence
                     .Subscribe(OnLoggedIn);
             });
         }
 
-        public void OnLoggedIn((bool? LoggedIn, LoginUserOutput User) tuple)
+        public void OnLoggedIn(LoginUserOutput user)
         {
-            if (!tuple.LoggedIn.GetValueOrDefault(false) || tuple.User == null)
+            if (user == null)
             {
                 StartActivity(typeof(LoginActivity));
                 return;
             }
 
-            switch (tuple.User.Role)
+            switch (user.Role)
             {
                 case UserRole.Admin:
                     StartActivity(typeof(AdminDashboardActivity));
