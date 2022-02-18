@@ -61,36 +61,9 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="p3y-1C-Z4v" userLabel="NamesTableView">
-                                <rect key="frame" x="16" y="110" width="382" height="736"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="p3y-1C-Z4v" userLabel="NamesTableView">
+                                <rect key="frame" x="0.0" y="110" width="414" height="736"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NameTableViewCell" id="6uM-io-AwK" customClass="NameTableViewCell">
-                                        <rect key="frame" x="0.0" y="44.5" width="382" height="43.5"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6uM-io-AwK" id="ddZ-5z-kMM">
-                                            <rect key="frame" x="0.0" y="0.0" width="382" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAA-g9-Ofj">
-                                                    <rect key="frame" x="0.0" y="11.5" width="382" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="qAA-g9-Ofj" secondAttribute="trailing" id="Fbb-Z7-jtO"/>
-                                                <constraint firstItem="qAA-g9-Ofj" firstAttribute="leading" secondItem="ddZ-5z-kMM" secondAttribute="leading" id="udl-gg-Rew"/>
-                                                <constraint firstItem="qAA-g9-Ofj" firstAttribute="centerY" secondItem="ddZ-5z-kMM" secondAttribute="centerY" id="w9k-tr-3cj"/>
-                                            </constraints>
-                                            <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="NameLabel" destination="qAA-g9-Ofj" id="XeS-EN-7Ah"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -99,9 +72,9 @@
                             <constraint firstAttribute="trailing" secondItem="glb-Bv-LBV" secondAttribute="trailing" constant="16" id="Jo4-GI-uyk"/>
                             <constraint firstItem="glb-Bv-LBV" firstAttribute="top" secondItem="hPl-z9-MO6" secondAttribute="bottom" constant="16" id="ZZJ-EC-Zrw"/>
                             <constraint firstItem="p3y-1C-Z4v" firstAttribute="top" secondItem="glb-Bv-LBV" secondAttribute="bottom" constant="16" id="ZhH-a9-Sd8"/>
-                            <constraint firstAttribute="trailing" secondItem="p3y-1C-Z4v" secondAttribute="trailing" constant="16" id="aYl-Ed-e0q"/>
+                            <constraint firstAttribute="trailing" secondItem="p3y-1C-Z4v" secondAttribute="trailing" id="aYl-Ed-e0q"/>
                             <constraint firstItem="glb-Bv-LBV" firstAttribute="leading" secondItem="K7X-s6-8op" secondAttribute="leading" constant="16" id="fvx-7C-Y0Y"/>
-                            <constraint firstItem="p3y-1C-Z4v" firstAttribute="leading" secondItem="K7X-s6-8op" secondAttribute="leading" constant="16" id="xDb-0W-ltY"/>
+                            <constraint firstItem="p3y-1C-Z4v" firstAttribute="leading" secondItem="K7X-s6-8op" secondAttribute="leading" id="xDb-0W-ltY"/>
                         </constraints>
                     </view>
                     <connections>
@@ -198,7 +171,7 @@
                                             <directionalEdgeInsets key="contentInsets" top="16" leading="0.0" bottom="16" trailing="0.0"/>
                                         </buttonConfiguration>
                                     </button>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y7t-ES-8L9">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="WarningIcon" translatesAutoresizingMaskIntoConstraints="NO" id="y7t-ES-8L9">
                                         <rect key="frame" x="143" y="32" width="64" height="64"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="64" id="0pf-8v-00a"/>
@@ -224,6 +197,11 @@
                                     <constraint firstItem="0QO-Ex-dAw" firstAttribute="leading" secondItem="dy0-cc-SpK" secondAttribute="leading" constant="16" id="pP8-HV-NBm"/>
                                     <constraint firstItem="0QO-Ex-dAw" firstAttribute="top" secondItem="y7t-ES-8L9" secondAttribute="bottom" constant="32" id="sdl-d0-yxE"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" name="Background Secondary"/>
@@ -265,6 +243,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="WarningIcon" width="64" height="64"/>
         <namedColor name="Background Secondary">
             <color red="0.063000001013278961" green="0.81999999284744263" blue="0.73299998044967651" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

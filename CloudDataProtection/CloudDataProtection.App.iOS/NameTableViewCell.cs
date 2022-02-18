@@ -2,12 +2,17 @@
 
 using System;
 using CloudDataProtection.App.Shared.ViewModels;
+using Foundation;
 using ReactiveUI;
+using UIKit;
 
 namespace CloudDataProtection.App.iOS
 {
 	public partial class NameTableViewCell : ReactiveTableViewCell<NameViewModel>
 	{
+		public static readonly UINib Nib = UINib.FromName("NameCell", NSBundle.MainBundle);
+		public const string Identifier = "NameTableViewCell";
+
 		public NameTableViewCell(IntPtr handle) : base(handle)
 		{
 		}

@@ -14,6 +14,7 @@
         <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
         <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
         <ProvisioningType>automatic</ProvisioningType>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
         <DebugSymbols>true</DebugSymbols>
@@ -117,6 +118,10 @@
         <ImageAsset Include="Assets.xcassets\Contents.json">
           <Visible>False</Visible>
         </ImageAsset>
+        <ImageAsset Include="Assets.xcassets\WarningIcon.imageset\Contents.json">
+          <Visible>False</Visible>
+        </ImageAsset>
+        <ImageAsset Include="Assets.xcassets\WarningIcon.imageset\Icon.pdf" />
         <ImageAsset Include="Colors.xcassets\Background Primary.colorset\Contents.json">
           <Visible>False</Visible>
         </ImageAsset>
@@ -148,6 +153,7 @@
     <ItemGroup>
         <InterfaceDefinition Include="LaunchScreen.storyboard" />
         <InterfaceDefinition Include="Main.storyboard" />
+        <InterfaceDefinition Include="NameCell.xib" />
     </ItemGroup>
     <ItemGroup>
         <None Include="README.md" />
@@ -191,6 +197,9 @@
         <Project>{91bb57d8-2b64-427d-aaf8-5620a01b6851}</Project>
         <Name>CloudDataProtection.App.Shared</Name>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="TableView_padding.png" />
     </ItemGroup>
     <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
