@@ -12,11 +12,11 @@ using UIKit;
 
 namespace CloudDataProtection.App.iOS
 {
-	public partial class AdminDashboardViewController : ReactiveViewController<AdminDashboardViewModel>
+	public partial class OldAdminDashboardViewController : ReactiveTableViewController<AdminDashboardViewModel>
 	{
 		private NameViewModel _details;
 		
-		public AdminDashboardViewController(IntPtr handle) : base(handle)
+		public OldAdminDashboardViewController(IntPtr handle) : base(handle)
 		{
 		}
 
@@ -31,15 +31,12 @@ namespace CloudDataProtection.App.iOS
 			this.WhenActivated(d =>
 			{
 				this.WhenAnyValue (v => v.ViewModel.Rows)
-					.Where (_ => NamesTableView.Source == null)
-					.Subscribe (rows => NamesTableView.Source = new NameDataSource (NamesTableView, rows, ItemSelected))
+					.Where (_ => TableView.Source == null)
+					.Subscribe (rows => TableView.Source = new NameDataSource (TableView, rows, ItemSelected))
 					.DisposeWith (d);
-				
-				this.Bind(ViewModel, vm => vm.SearchQuery, a => a.SearchTextField.Text)
-					.DisposeWith(d);
 			});
 		}
-		
+
 		private void ItemSelected(NameViewModel model)
 		{
 			if (_details == null)
@@ -48,7 +45,7 @@ namespace CloudDataProtection.App.iOS
 				PerformSegue(SegueIdentifiers.ShowNameDetail, this);
 			}
 		}
-		
+
 		public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
 		{
 			base.PrepareForSegue(segue, sender);

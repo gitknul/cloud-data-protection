@@ -159,6 +159,10 @@
         <Compile Include="AdminDashboardViewController.designer.cs">
           <DependentUpon>AdminDashboardViewController.cs</DependentUpon>
         </Compile>
+        <Compile Include="OldAdminDashboardViewController.cs" />
+        <Compile Include="OldAdminDashboardViewController.designer.cs">
+          <DependentUpon>OldAdminDashboardViewController.cs</DependentUpon>
+        </Compile>
         <Compile Include="Datasources\NameDataSource.cs" />
         <Compile Include="LoginViewController.cs" />
         <Compile Include="LoginViewController.designer.cs">

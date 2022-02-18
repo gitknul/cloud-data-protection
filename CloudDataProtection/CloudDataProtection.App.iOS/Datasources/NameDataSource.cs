@@ -15,6 +15,8 @@ namespace CloudDataProtection.App.iOS.Datasources
         private ReadOnlyObservableCollection<NameViewModel> Collection =>
             Data[0].Collection as ReadOnlyObservableCollection<NameViewModel>;
 
+        public const string CellIdentifier = "NameTableViewCell";
+
         public NameDataSource(UITableView tableView, ReadOnlyObservableCollection<NameViewModel> rows, Action<NameViewModel> itemSelected) : base(tableView)
         {
             _itemSelected = itemSelected;
@@ -34,7 +36,7 @@ namespace CloudDataProtection.App.iOS.Datasources
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(nameof(NameTableViewCell)) as NameTableViewCell;
+            var cell = tableView.DequeueReusableCell(CellIdentifier) as NameTableViewCell;
 
             cell.ViewModel = Collection.ElementAt(indexPath.Row);
 

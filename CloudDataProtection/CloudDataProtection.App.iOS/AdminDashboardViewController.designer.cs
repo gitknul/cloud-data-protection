@@ -13,11 +13,27 @@ namespace CloudDataProtection.App.iOS
 	[Register ("AdminDashboardViewController")]
 	partial class AdminDashboardViewController
 	{
-		void ReleaseDesignerOutlets ()
-		{
-		}
-		
+		[Outlet]
+		UIKit.UITableView NamesTableView { get; set; }
+
+		[Outlet]
+		UIKit.UITextField SearchTextField { get; set; }
+
 		[Action ("UnwindToAdminDashboard:")]
 		partial void UnwindToAdminDashboard (UIKit.UIStoryboardSegue unwindSegue);
+
+		void ReleaseDesignerOutlets ()
+		{
+			if (NamesTableView != null) {
+				NamesTableView.Dispose ();
+				NamesTableView = null;
+			}
+
+			if (SearchTextField != null) {
+				SearchTextField.Dispose ();
+				SearchTextField = null;
+			}
+
+		}
 	}
 }
