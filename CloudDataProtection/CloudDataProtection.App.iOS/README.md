@@ -45,3 +45,9 @@ public partial class MyViewController : ReactiveViewController<MyViewModel>
     }
 }
 ```
+
+## Errors
+
+Dynamic_cast error 2: One or more of the following type_info's has hidden visibility or is defined in more than one translation unit xamarin ios
+
+A outlet in the storyboard is broken. Open the storyboard in XCode and ensure all outlets are connected to existing views in your view controller.
