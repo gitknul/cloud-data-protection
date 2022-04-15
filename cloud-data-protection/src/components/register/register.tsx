@@ -51,17 +51,13 @@ const Register = () => {
     const onSuccess = () => {
         setEmail('');
 
-        enqueueSnackbar('Your account has been created. You can now log in using the specified credentials', snackbarOptions);
+        enqueueSnackbar('Your account has been created. You can now log in using the specified credentials', snackbarOptions.success);
 
         history.push("/login");
     }
 
-    const onError = (e: any) => {
-        if (!(e instanceof String)) {
-            e = 'An unknown error has occurred.';
-        }
-
-        enqueueSnackbar(e, snackbarOptions);
+    const onError = (e: string) => {
+        enqueueSnackbar(e, snackbarOptions.error);
     }
 
     const onFinish = () => {

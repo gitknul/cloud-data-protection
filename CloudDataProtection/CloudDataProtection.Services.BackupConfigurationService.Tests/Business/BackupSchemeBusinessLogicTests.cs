@@ -34,7 +34,7 @@ namespace CloudDataProtection.Services.BackupConfigurationService.Tests.Business
             BackupScheme scheme = new BackupScheme
             {
                 Frequency = BackupFrequency.Daily,
-                Time = new Time(18, 00),
+                Time = new Time(18, 00)
             };
 
             BusinessResult<BackupScheme> result = await _logic.Create(scheme);
@@ -106,17 +106,17 @@ namespace CloudDataProtection.Services.BackupConfigurationService.Tests.Business
             schemes.Add(new BackupScheme
             {
                 Frequency = BackupFrequency.Daily,
-                Time = new Time(08, 00),
+                Time = new Time(08, 00)
             });
             schemes.Add(new BackupScheme
             {
                 Frequency = BackupFrequency.Daily,
-                Time = new Time(14, 00),
+                Time = new Time(14, 00)
             });
             schemes.Add(new BackupScheme
             {
                 Frequency = BackupFrequency.Daily,
-                Time = new Time(18, 00),
+                Time = new Time(18, 00)
             });
             
             Seed(schemes);

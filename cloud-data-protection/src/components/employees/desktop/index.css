@@ -1,0 +1,7 @@
+.employees__datagrid > thead > tr > th {
+    font-weight: bold!important;
+}
+
+.employees__datagrid {
+    margin-top: 1rem;
+}

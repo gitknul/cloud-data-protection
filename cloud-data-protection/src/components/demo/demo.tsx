@@ -108,12 +108,12 @@ const Demo = () => {
         e.preventDefault();
 
         if (!selectedFile) {
-            enqueueSnackbar('Please upload a file', snackbarOptions);
+            enqueueSnackbar('Please upload a file', snackbarOptions.warning);
             return;
         }
 
         if (selectedFile.size > DemoService.maxFileSize) {
-            enqueueSnackbar('The selected file is too big. The upload limit is 25MB.', snackbarOptions);
+            enqueueSnackbar('The selected file is too big. The upload limit is 25MB.', snackbarOptions.warning);
             return;
         }
 
@@ -155,7 +155,7 @@ const Demo = () => {
         const file: File = e.target.files[0];
 
         if (file.size > DemoService.maxFileSize) {
-            enqueueSnackbar('The selected file is too big. The upload limit is 25MB.', snackbarOptions);
+            enqueueSnackbar('The selected file is too big. The upload limit is 25MB.', snackbarOptions.info);
 
             setSelectedFile(undefined);
 
@@ -201,15 +201,11 @@ const Demo = () => {
     }
 
     const onDownload = (e: FileDownloadResult) => {
-        enqueueSnackbar(`Downloaded ${e.name} from ${e.downloadedFrom}`, snackbarOptions);
+        enqueueSnackbar(`Downloaded ${e.name} from ${e.downloadedFrom}`, snackbarOptions.info);
     }
 
-    const onError = (e: any) => {
-        if (!(e instanceof String)) {
-            e = 'An unknown error has occurred.';
-        }
-
-        enqueueSnackbar(e, snackbarOptions);
+    const onError = (e: string) => {
+        enqueueSnackbar(e, snackbarOptions.error);
     }
 
     return (

@@ -53,7 +53,7 @@ const AccountSettings = () => {
     }
 
     const onDeleteAccountSuccess = () => {
-        enqueueSnackbar('Your account has been deleted. We hope to see you again in the future.', snackbarOptions);
+        enqueueSnackbar('Your account has been deleted. We hope to see you again in the future.', snackbarOptions.info);
         history.push('/');
     }
 
@@ -82,7 +82,7 @@ const AccountSettings = () => {
     }
 
     const onChangeEmailSuccess = (email: string) => {
-        enqueueSnackbar(`A confirmation link has been sent to ${email}.`, snackbarOptions)
+        enqueueSnackbar(`A confirmation link has been sent to ${email}.`, snackbarOptions.success)
     }
 
     const onChangeEmailComplete = () => {
@@ -112,7 +112,7 @@ const AccountSettings = () => {
 
     const onChangePasswordSuccess = () => {
         setChangePasswordVisible(false);
-        enqueueSnackbar('Your password has been updated.', snackbarOptions)
+        enqueueSnackbar('Your password has been updated.', snackbarOptions.success)
     }
 
     const onChangePasswordComplete = () => {
@@ -120,8 +120,8 @@ const AccountSettings = () => {
         stopLoading();
     }
 
-    const onError = (e: any) => {
-        enqueueSnackbar(e, snackbarOptions);
+    const onError = (e: string) => {
+        enqueueSnackbar(e, snackbarOptions.error);
     }
 
     const accountService = new AccountService();

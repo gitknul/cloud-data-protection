@@ -6,7 +6,7 @@ export const formatDate = (input: Date | string): string => {
     const language = 'en';
 
     // @ts-ignore
-    return input.toLocaleDateString(language, options).toLowerCase();
+    return input.toLocaleDateString(language, options);
 }
 
 export const formatTime = (hour: number, minute: number): string => {

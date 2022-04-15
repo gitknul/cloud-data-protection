@@ -24,6 +24,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDataProtection.Functio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDataProtection.CI.KeyGenerator", "CloudDataProtection.CI.KeyGenerator\CloudDataProtection.CI.KeyGenerator.csproj", "{B80A698D-8036-45B8-ADF4-0A04046E3C60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDataProtection.Services.EmployeeService", "CloudDataProtection.Services.EmployeeService\CloudDataProtection.Services.EmployeeService.csproj", "{2C6246F4-B623-4011-8330-94B13C20A929}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDataProtection.Services.EmployeeService.Tests", "CloudDataProtection.Services.EmployeeService.Tests\CloudDataProtection.Services.EmployeeService.Tests.csproj", "{08C00635-4D5C-49D7-A6FE-B6690BBD3FF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDataProtection.Linq", "CloudDataProtection.Linq\CloudDataProtection.Linq.csproj", "{AA12D15A-01AF-42FD-8C79-1655A72A859E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDataProtection.Linq.Tests", "CloudDataProtection.Linq.Tests\CloudDataProtection.Linq.Tests.csproj", "{92C44877-B52A-4A24-9DA8-9B12B2DA4F8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudDataProtection.Benchmarks", "CloudDataProtection.Benchmarks\CloudDataProtection.Benchmarks.csproj", "{D946C824-21E6-4128-BE58-ABE7BE338AD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,5 +88,25 @@ Global
 		{B80A698D-8036-45B8-ADF4-0A04046E3C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B80A698D-8036-45B8-ADF4-0A04046E3C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B80A698D-8036-45B8-ADF4-0A04046E3C60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C6246F4-B623-4011-8330-94B13C20A929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C6246F4-B623-4011-8330-94B13C20A929}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C6246F4-B623-4011-8330-94B13C20A929}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C6246F4-B623-4011-8330-94B13C20A929}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08C00635-4D5C-49D7-A6FE-B6690BBD3FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08C00635-4D5C-49D7-A6FE-B6690BBD3FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08C00635-4D5C-49D7-A6FE-B6690BBD3FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08C00635-4D5C-49D7-A6FE-B6690BBD3FF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA12D15A-01AF-42FD-8C79-1655A72A859E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA12D15A-01AF-42FD-8C79-1655A72A859E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA12D15A-01AF-42FD-8C79-1655A72A859E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA12D15A-01AF-42FD-8C79-1655A72A859E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92C44877-B52A-4A24-9DA8-9B12B2DA4F8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92C44877-B52A-4A24-9DA8-9B12B2DA4F8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92C44877-B52A-4A24-9DA8-9B12B2DA4F8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92C44877-B52A-4A24-9DA8-9B12B2DA4F8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D946C824-21E6-4128-BE58-ABE7BE338AD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D946C824-21E6-4128-BE58-ABE7BE338AD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D946C824-21E6-4128-BE58-ABE7BE338AD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D946C824-21E6-4128-BE58-ABE7BE338AD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -53,12 +53,12 @@ const ConfirmChangeEmail = (props: RouteComponentProps) => {
     }
 
     const onConfirmChangeEmailError = (error: string) => {
-        enqueueSnackbar(error, snackbarOptions);
+        enqueueSnackbar(error, snackbarOptions.info);
         history.push('/');
     }
 
     const onConfirmChangeEmailSuccess = (result: ConfirmChangeEmailResult) => {
-        enqueueSnackbar(`Your email address has been updated to ${result.email}.`, snackbarOptions);
+        enqueueSnackbar(`Your email address has been updated to ${result.email}.`, snackbarOptions.info);
         history.push('/');
     }
 

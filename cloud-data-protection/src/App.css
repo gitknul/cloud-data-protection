@@ -1,6 +1,10 @@
 @import "typography.css";
-@import "colors.css";
 @import "skeletons.css";
+
+:root {
+  --avatarWidth: 2.5rem;
+  --avatarHeight: 2.5rem;
+}
 
 .app__wrapper {
   box-sizing: border-box;
@@ -31,6 +35,20 @@
 
 .card__content {
   margin-bottom: 0;
+  margin-top: 1rem;
+}
+
+.card__content__row {
+  display: flex;
+  align-items: center;
+}
+
+.card__content__row:not(nth:first-child) {
+  margin-top: .25rem;
+}
+
+.card__content__row__inline-icon {
+  margin-left: .5rem;
 }
 
 .dialog__content {
@@ -40,6 +58,59 @@
 
 .dialog__title * {
   font-weight: bold !important;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.MuiDataGrid-columnHeader--no-separator > .MuiDataGrid-columnSeparator {
+  display: none!important;
+}
+
+.fab--bottom-right {
+  position: fixed!important;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.content__navigation {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.content__navigation__back {
+  width: var(--avatarWidth)!important;
+  height: var(--avatarHeight)!important;
+  padding: 0!important;
+  margin-bottom: .5rem!important;
+}
+
+.MuiAvatar-circle {
+  width: var(--avatarWidth);
+  height: var(--avatarHeight);
+}
+
+.infinite-scroll__progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.infinite-scroll__end__text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.infinite-scroll__end hr {
+  margin: .5rem;
+}
+
+#notistack-snackbar {
+  white-space: pre-line;
 }
 
 @media all and (max-width: 1366px) {

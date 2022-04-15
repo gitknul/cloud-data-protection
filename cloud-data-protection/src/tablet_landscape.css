@@ -6,4 +6,18 @@
     .nav-link .MuiListItemIcon-root {
         min-width: 2.5rem;
     }
+
+    .employees__search {
+        position: sticky;
+        top: calc(56px + .5rem);
+    }
+
+    .employee__detail__grid {
+        grid-auto-columns: 100%;
+        grid-auto-flow: row;
+    }
+
+    .card__content__row__inline-icon {
+        display: none!important;
+    }
 }

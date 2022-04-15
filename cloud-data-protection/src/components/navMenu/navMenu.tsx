@@ -7,22 +7,17 @@ import {
     DriveEta,
     Person,
     PersonAdd,
-    ExitToApp, Backup, Settings
+    ExitToApp,
+    Backup,
+    Settings,
+    People,
 } from '@material-ui/icons';
-import {
-    AppBar,
-    Divider,
-    Drawer,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Toolbar,
-} from "@material-ui/core";
+import {AppBar, Divider, Drawer, ListItem, ListItemIcon, ListItemText, Toolbar} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import NavMenuItem from "components/navMenu/navMenuItem";
 import UserRole from "entities/userRole";
+import {NavLink} from 'reactstrap';
 import './navMenu.css';
-import { NavLink } from 'reactstrap';
 
 const NavMenu = () => {
     const authenticated = useSelector(selectAuthenticated);
@@ -34,7 +29,7 @@ const NavMenu = () => {
     const menuItems = (): JSX.Element[] => {
         const links: NavMenuItem[] = [];
 
-        links.push({text: 'Home', route: '/', icon: <Home /> });
+        links.push({text: 'Home', route: '/', icon: <Home/>});
 
         if (authenticated) {
             userMenuItems().forEach(link => links.push(link));
@@ -70,9 +65,9 @@ const NavMenu = () => {
     const clientMenuItems = (): NavMenuItem[] => {
         const links: NavMenuItem[] = [];
 
-        links.push({text: 'Onboarding', route: '/onboarding', icon: <DriveEta />})
-        links.push({text: 'Backup', route: '/demo', icon: <Backup />})
-        links.push({text: 'Settings', route: '/settings', icon: <Settings />})
+        links.push({text: 'Onboarding', route: '/onboarding', icon: <DriveEta/>})
+        links.push({text: 'Backup', route: '/demo', icon: <Backup/>})
+        links.push({text: 'Settings', route: '/settings', icon: <Settings/>})
 
         return links;
     }
@@ -83,7 +78,7 @@ const NavMenu = () => {
     const employeeMenuItems = (): NavMenuItem[] => {
         const links: NavMenuItem[] = [];
 
-        links.push({text: 'Settings', route: '/settings', icon: <Settings />})
+        links.push({text: 'Settings', route: '/settings', icon: <Settings/>})
 
         return links;
     }
@@ -91,7 +86,8 @@ const NavMenu = () => {
     const adminMenuItems = (): NavMenuItem[] => {
         const links: NavMenuItem[] = [];
 
-        links.push({text: 'Settings', route: '/settings', icon: <Settings />})
+        links.push({text: 'Employees', route: '/employees', icon: <People/>})
+        links.push({text: 'Settings', route: '/settings', icon: <Settings/>})
 
         return links;
     }
@@ -103,10 +99,10 @@ const NavMenu = () => {
         const links = [];
 
         if (authenticated) {
-            links.push({text: 'Logout', route: '/logout', icon: <ExitToApp /> });
+            links.push({text: 'Logout', route: '/logout', icon: <ExitToApp/>});
         } else {
-            links.push({text: 'Login', route: '/login', icon: <Person /> });
-            links.push({text: 'Register', route: '/register', icon: <PersonAdd /> });
+            links.push({text: 'Login', route: '/login', icon: <Person/>});
+            links.push({text: 'Register', route: '/register', icon: <PersonAdd/>});
         }
 
         return links.map(link => mapLink(link));
@@ -115,7 +111,7 @@ const NavMenu = () => {
     /*
         Maps a NavMenuItem to a JSX Element
      */
-    const mapLink = (link: NavMenuItem): JSX.Element =>  {
+    const mapLink = (link: NavMenuItem): JSX.Element => {
         return (
             <NavLink to={link.route} tag={Link} key={link.text}>
                 <ListItem button className='nav__drawer__link'>

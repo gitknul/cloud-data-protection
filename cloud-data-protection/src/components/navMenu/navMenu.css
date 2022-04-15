@@ -25,6 +25,17 @@
     justify-content: space-between!important;
 }
 
+.nav__toolbar .nav__back {
+    border-radius: 100%;
+    color: white!important;
+    padding: .5rem!important;
+    min-width: unset!important;
+}
+
+.nav__toolbar .nav__back {
+    margin: 0!important;
+}
+
 .nav__user {
     color: white!important;
     display: flex;

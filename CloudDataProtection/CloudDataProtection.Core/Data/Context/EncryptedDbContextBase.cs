@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using CloudDataProtection.Core.Cryptography.Aes;
 using CloudDataProtection.Core.Cryptography.Attributes;
 using CloudDataProtection.Core.Data.Converters;
@@ -63,7 +65,7 @@ namespace CloudDataProtection.Core.Data.Context
             }
         }
 
-        protected sealed override void OnConfiguring(DbContextOptionsBuilder builder)
+        protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
             base.OnConfiguring(builder);
 

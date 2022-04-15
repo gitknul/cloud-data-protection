@@ -1,0 +1,29 @@
+.employee__create__form {
+    margin-top: 1rem;
+    width: min(48rem, 100%);
+}
+
+.employee__form__input {
+    display: block!important;
+    width: 100%!important;
+    margin-bottom: 1rem!important;
+}
+
+.employee__form__submit {
+    display: block!important;
+    margin-right: 0!important;
+    margin-left: auto!important;
+}
+
+.employee__gender__select > .MuiButtonBase-root {
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+}
+
+.employee__gender__label {
+    margin-top: .5rem;
+}
+
+.employee__gender__group {
+    margin-top: .5rem;
+}

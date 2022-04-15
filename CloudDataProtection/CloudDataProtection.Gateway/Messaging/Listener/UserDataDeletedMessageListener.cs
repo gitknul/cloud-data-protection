@@ -31,7 +31,7 @@ namespace CloudDataProtection.Messaging.Listener
             {
                 ServiceName = message.Service,
                 StartedAt = message.StartedAt,
-                CompletedAt = message.CompletedAt,
+                CompletedAt = message.CompletedAt
             };
 
             BusinessResult<Tuple<UserDeletionHistory, string>> addProgressResult = await logic.AddProgress(history, message.UserId);

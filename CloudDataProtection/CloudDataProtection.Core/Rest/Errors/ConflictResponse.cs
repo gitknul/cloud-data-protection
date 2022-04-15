@@ -2,6 +2,7 @@
 
 namespace CloudDataProtection.Core.Rest.Errors
 {
+    
     public class ConflictResponse : IErrorResponse
     {
         public string Message { get; }

@@ -9,14 +9,14 @@ services:
       - cdp_rabbitmq:/rabbitmq
   
   cdp_postgres:
-    image: "postgres"
+    image: "postgres:14.2"
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: postgresdevelopment
   
   cdp_mongo:
-    image: "mongo"
+    image: "mongo:5.0.6"
     ports:
       - "27017:27017"
     environment:

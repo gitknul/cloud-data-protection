@@ -8,8 +8,6 @@
     background: linear-gradient(90deg, var(--skeleton-accent) 0%, var(--skeleton-accent) 20%, var(--skeleton-accent-light) 40%, var(--skeleton-accent) 60%, var(--skeleton-accent) 80%);
     background-size: 200%;
     width: min(24rem, 100%);
-
-    animation: skeleton-lines var(--skeleton-duration) infinite linear;
 }
 
 .skeleton--checkbox {
@@ -22,6 +20,33 @@
     width: min(16rem, 100%);
 
     animation: skeleton-lines-16 var(--skeleton-duration) infinite linear;
+}
+
+.skeleton--24 {
+    width: min(24rem, 100%);
+
+    animation: skeleton-lines-24 var(--skeleton-duration) infinite linear;
+}
+
+.skeleton--32 {
+    width: min(32rem, 100%);
+
+    animation: skeleton-lines-32 var(--skeleton-duration) infinite linear;
+}
+
+.skeleton--flex {
+    align-self: stretch;
+}
+
+.skeleton--avatar {
+    width: var(--avatarWidth);
+    height: var(--avatarWidth);
+
+    animation: skeleton-lines-avatar var(--skeleton-duration) infinite linear;
+}
+
+.skeleton--corners--sm {
+    border-radius: 3px!important;
 }
 
 @keyframes skeleton-lines-16 {
@@ -41,5 +66,25 @@
 
     40%, 100% {
         background-position: 18rem;
+    }
+}
+
+@keyframes skeleton-lines-32 {
+    0% {
+        background-position: -40rem;
+    }
+
+    40%, 100% {
+        background-position: 24rem;
+    }
+}
+
+@keyframes skeleton-lines-avatar {
+    0% {
+        background-position: calc(var(--drawerWidth) * -1.25);
+    }
+
+    40%, 100% {
+        background-position: calc(var(--drawerWidth) * 0.75);
     }
 }

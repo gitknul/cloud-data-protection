@@ -48,12 +48,8 @@ const Login = () => {
         history.push('/');
     }
 
-    const onError = (e: any) => {
-        if (!(e instanceof String)) {
-            e = 'An unknown error has occurred.';
-        }
-
-        enqueueSnackbar(e, snackbarOptions);
+    const onError = (e: string) => {
+        enqueueSnackbar(e, snackbarOptions.error);
     }
 
     const onFinish = () => {

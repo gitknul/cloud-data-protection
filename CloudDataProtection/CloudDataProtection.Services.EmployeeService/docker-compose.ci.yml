@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  cdp_postgres_ci:
+    image: "postgres:14.2"
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: postgresCI
+  

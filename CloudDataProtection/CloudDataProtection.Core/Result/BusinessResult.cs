@@ -18,6 +18,16 @@ namespace CloudDataProtection.Core.Result
                 ErrorType = ResultError.Unknown
             };
         }
+        
+        public static BusinessResult<TResult> Conflict(string message)
+        {
+            return new BusinessResult<TResult>
+            {
+                Success = false,
+                Message = message,
+                ErrorType = ResultError.Conflict
+            };
+        }
 
         public static BusinessResult<TResult> NotFound(string message)
         {

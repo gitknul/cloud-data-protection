@@ -78,7 +78,6 @@ namespace CloudDataProtection.Core.DependencyInjection.Extensions
                 x.AddPolicy("AdminOnly", p => 
                     p.RequireAssertion(context => context.User.HasClaim(ClaimTypes.Role, ((int)UserRole.Admin).ToString())));
             });
-
         }
     }
 }

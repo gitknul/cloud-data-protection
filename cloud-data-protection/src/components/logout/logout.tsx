@@ -14,7 +14,7 @@ const Logout = () => {
     const handleLogout = () => {
         authService.logout();
 
-        enqueueSnackbar('You are now logged out', snackbarOptions);
+        enqueueSnackbar('You are now logged out', snackbarOptions.info);
 
         history.push('/');
     }
