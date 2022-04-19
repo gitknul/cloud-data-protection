@@ -3,7 +3,7 @@ import {RouteComponentProps} from "react-router";
 import {useHistory} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {startLoading, stopLoading} from "common/progress/helper";
-import snackbarOptions from "common/snackbar/options";
+import SnackbarOptions from "common/snackbar/options";
 import {useSnackbar} from "notistack";
 import {CancelTokenSource} from "axios";
 import {http} from "common/http";
@@ -66,13 +66,13 @@ const ResetPassword = (props: RouteComponentProps) => {
     }
 
     const onSuccess = () => {
-        enqueueSnackbar('Your password has been set. You can now log in using the specified credentials', snackbarOptions.success);
+        enqueueSnackbar('Your password has been set. You can now log in using the specified credentials', SnackbarOptions.success);
 
         history.push("/login");
     }
 
     const onError = (e: string) => {
-        enqueueSnackbar(e, snackbarOptions.error);
+        enqueueSnackbar(e, SnackbarOptions.error);
     }
 
     const onFinish = () => {

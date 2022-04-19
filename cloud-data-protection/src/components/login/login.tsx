@@ -3,7 +3,7 @@ import {AuthService} from "services/authService";
 import {Button, Input, Typography} from "@material-ui/core";
 import {useSnackbar} from 'notistack';
 import {http} from "common/http";
-import snackbarOptions from "common/snackbar/options";
+import SnackbarOptions from "common/snackbar/options";
 import {CancelTokenSource} from "axios";
 import {startLoading, stopLoading} from "common/progress/helper";
 import { useHistory } from "react-router-dom";
@@ -49,7 +49,7 @@ const Login = () => {
     }
 
     const onError = (e: string) => {
-        enqueueSnackbar(e, snackbarOptions.error);
+        enqueueSnackbar(e, SnackbarOptions.error);
     }
 
     const onFinish = () => {

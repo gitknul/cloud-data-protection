@@ -1,34 +1,29 @@
 import {OptionsObject} from "notistack";
 
-const base: OptionsObject = {
-    autoHideDuration: 5000, anchorOrigin: {vertical: 'bottom', horizontal: 'center'}
+class SnackbarOptions {
+    public static readonly base: OptionsObject = {
+        autoHideDuration: 5000, anchorOrigin: {vertical: 'bottom', horizontal: 'center'}
+    }
+
+    public static readonly error: OptionsObject = {
+        variant: 'error',
+        ...SnackbarOptions.base
+    }
+
+    public static readonly success: OptionsObject = {
+        variant: 'success',
+        ...SnackbarOptions.base
+    }
+
+    public static readonly warning: OptionsObject = {
+        variant: 'warning',
+        ...SnackbarOptions.base
+    }
+
+    public static readonly info: OptionsObject = {
+        variant: 'info',
+        ...SnackbarOptions.base
+    }
 }
 
-const error: OptionsObject = {
-    variant: 'error',
-    ...base
-}
-
-const success: OptionsObject = {
-    variant: 'success',
-    ...base
-}
-
-const warning: OptionsObject = {
-    variant: 'warning',
-    ...base
-}
-
-const info: OptionsObject = {
-    variant: 'info',
-    ...base
-}
-
-const snackbarOptions = {
-    error: error,
-    success: success,
-    warning: warning,
-    info: info
-}
-
-export default snackbarOptions;
+export default SnackbarOptions;

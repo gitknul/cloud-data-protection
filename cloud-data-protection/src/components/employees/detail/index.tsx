@@ -5,7 +5,7 @@ import {formatEnum} from "common/formatting/enumFormat";
 import {formatDate} from "common/formatting/timeFormat";
 import {http} from "common/http";
 import {startLoading, stopLoading} from "common/progress/helper";
-import snackbarOptions from "common/snackbar/options";
+import SnackbarOptions from "common/snackbar/options";
 import {useSnackbar} from "notistack";
 import React, {useEffect, useState} from 'react';
 import {RouteComponentProps} from "react-router";
@@ -56,7 +56,7 @@ const EmployeeDetail = (props: RouteComponentProps) => {
 
 
     const onError = (e: string) => {
-        enqueueSnackbar(e, snackbarOptions.error);
+        enqueueSnackbar(e, SnackbarOptions.error);
         history.push('/employees')
     }
 

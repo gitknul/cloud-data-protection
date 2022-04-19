@@ -2,7 +2,7 @@ import {RouteComponentProps} from "react-router";
 import {useHistory} from "react-router-dom";
 import React, {Fragment, useEffect} from "react";
 import {startLoading, stopLoading} from "common/progress/helper";
-import snackbarOptions from "common/snackbar/options";
+import SnackbarOptions from "common/snackbar/options";
 import {useSnackbar} from "notistack";
 import {CancelTokenSource} from "axios";
 import {http} from "common/http";
@@ -53,12 +53,12 @@ const ConfirmChangeEmail = (props: RouteComponentProps) => {
     }
 
     const onConfirmChangeEmailError = (error: string) => {
-        enqueueSnackbar(error, snackbarOptions.info);
+        enqueueSnackbar(error, SnackbarOptions.info);
         history.push('/');
     }
 
     const onConfirmChangeEmailSuccess = (result: ConfirmChangeEmailResult) => {
-        enqueueSnackbar(`Your email address has been updated to ${result.email}.`, snackbarOptions.info);
+        enqueueSnackbar(`Your email address has been updated to ${result.email}.`, SnackbarOptions.info);
         history.push('/');
     }
 

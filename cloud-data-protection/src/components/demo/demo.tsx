@@ -16,7 +16,7 @@ import {http} from "common/http";
 import DemoService from "services/demoService";
 import {useSnackbar} from "notistack";
 import {startLoading, stopLoading} from "common/progress/helper";
-import snackbarOptions from "common/snackbar/options";
+import SnackbarOptions from "common/snackbar/options";
 import {FileDownloadResult} from "services/result/demo/fileDownloadResult";
 import {FileUploadResult} from "services/result/demo/fileUploadResult";
 import {FileInfoResult} from "services/result/demo/fileInfoResult";
@@ -108,12 +108,12 @@ const Demo = () => {
         e.preventDefault();
 
         if (!selectedFile) {
-            enqueueSnackbar('Please upload a file', snackbarOptions.warning);
+            enqueueSnackbar('Please upload a file', SnackbarOptions.warning);
             return;
         }
 
         if (selectedFile.size > DemoService.maxFileSize) {
-            enqueueSnackbar('The selected file is too big. The upload limit is 25MB.', snackbarOptions.warning);
+            enqueueSnackbar('The selected file is too big. The upload limit is 25MB.', SnackbarOptions.warning);
             return;
         }
 
@@ -155,7 +155,7 @@ const Demo = () => {
         const file: File = e.target.files[0];
 
         if (file.size > DemoService.maxFileSize) {
-            enqueueSnackbar('The selected file is too big. The upload limit is 25MB.', snackbarOptions.info);
+            enqueueSnackbar('The selected file is too big. The upload limit is 25MB.', SnackbarOptions.info);
 
             setSelectedFile(undefined);
 
@@ -181,7 +181,7 @@ const Demo = () => {
     const copyToClipboard = async (e: any) => {
         await navigator.clipboard.writeText(e.target.innerText);
 
-        enqueueSnackbar('Code has been copied to the clipboard', { ...snackbarOptions, autoHideDuration: 2500 });
+        enqueueSnackbar('Code has been copied to the clipboard', SnackbarOptions.info);
     }
 
     const download = async () => {
@@ -201,11 +201,11 @@ const Demo = () => {
     }
 
     const onDownload = (e: FileDownloadResult) => {
-        enqueueSnackbar(`Downloaded ${e.name} from ${e.downloadedFrom}`, snackbarOptions.info);
+        enqueueSnackbar(`Downloaded ${e.name} from ${e.downloadedFrom}`, SnackbarOptions.success);
     }
 
     const onError = (e: string) => {
-        enqueueSnackbar(e, snackbarOptions.error);
+        enqueueSnackbar(e, SnackbarOptions.error);
     }
 
     return (

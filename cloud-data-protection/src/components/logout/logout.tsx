@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {AuthService} from "services/authService";
 import {useSnackbar} from 'notistack';
-import snackbarOptions from "common/snackbar/options";
+import SnackbarOptions from "common/snackbar/options";
 import { useHistory } from "react-router-dom";
 
 const Logout = () => {
@@ -14,7 +14,7 @@ const Logout = () => {
     const handleLogout = () => {
         authService.logout();
 
-        enqueueSnackbar('You are now logged out', snackbarOptions.info);
+        enqueueSnackbar('You are now logged out', SnackbarOptions.info);
 
         history.push('/');
     }

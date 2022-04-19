@@ -2,7 +2,7 @@ import {IconButton, Input, Typography} from "@material-ui/core";
 import {Search} from "@material-ui/icons";
 import {http} from "common/http";
 import {startLoading, stopLoading} from "common/progress/helper";
-import snackbarOptions from "common/snackbar/options";
+import SnackbarOptions from "common/snackbar/options";
 import EmployeesDesktop from "components/employees/desktop";
 import EmployeesMobile from "components/employees/mobile";
 import {selectLoading} from "features/progressSlice";
@@ -97,7 +97,7 @@ const Employees = () => {
     }
 
     const onError = (e: string) => {
-        enqueueSnackbar(e, snackbarOptions.error);
+        enqueueSnackbar(e, SnackbarOptions.error);
     }
 
     const onSearchChange = (e: ChangeEvent<HTMLInputElement>) => {

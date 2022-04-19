@@ -17,9 +17,11 @@ import './index.css';
 const EmployeesDesktop = (props: EmployeesProps) => {
     const [rows, setRows] = useState<EmployeeRow[]>([]);
 
+    const {employees, itemCount} = props;
+
     useEffect(() => {
         setRows(props.employees);
-    }, [props.employees, props.itemCount])
+    }, [employees, itemCount])
 
     const columns: GridColDef[] = [
         {

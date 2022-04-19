@@ -12,7 +12,7 @@ import {
 import React, {FormEvent, Fragment, useEffect, useState} from "react";
 import OnboardingService from "services/onboardingService";
 import Onboarding from "entities/onboarding";
-import snackbarOptions from "common/snackbar/options";
+import SnackbarOptions from "common/snackbar/options";
 import {useSnackbar} from "notistack";
 import OnboardingStatus from "entities/onboardingStatus";
 import axios, {CancelTokenSource} from "axios";
@@ -71,7 +71,7 @@ const OnboardingComponent = (props: RouteComponentProps) => {
             const message = params.get('message');
 
             if (message) {
-                enqueueSnackbar(message, {...snackbarOptions, autoHideDuration: 10000 });
+                enqueueSnackbar(message, {...SnackbarOptions, autoHideDuration: 10000 });
             }
         }
 
@@ -149,7 +149,7 @@ const OnboardingComponent = (props: RouteComponentProps) => {
     }
 
     const onError = (e: string) => {
-        enqueueSnackbar(e, snackbarOptions.error);
+        enqueueSnackbar(e, SnackbarOptions.error);
     }
 
     return (

@@ -4,7 +4,7 @@ import {CancelTokenSource} from "axios";
 import {formatEnum} from "common/formatting/enumFormat";
 import {http} from "common/http";
 import {startLoading, stopLoading} from "common/progress/helper";
-import snackbarOptions from "common/snackbar/options";
+import SnackbarOptions from "common/snackbar/options";
 import {selectLoading} from "features/progressSlice";
 import {useSnackbar} from "notistack";
 import React, {useEffect, useState} from "react";
@@ -99,13 +99,13 @@ const CreateEmployee = () => {
     }
 
     const onCreateSuccess = (result: EmployeeResult) => {
-        enqueueSnackbar(`Employee ${result.fullName} has been created`, snackbarOptions.success)
+        enqueueSnackbar(`Employee ${result.fullName} has been created`, SnackbarOptions.success)
 
         history.push('/employees');
     }
 
     const onError = (e: string) => {
-        enqueueSnackbar(e, snackbarOptions.error);
+        enqueueSnackbar(e, SnackbarOptions.error);
     }
 
     const canSubmit = () => {
