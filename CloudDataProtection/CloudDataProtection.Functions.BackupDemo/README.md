@@ -6,7 +6,7 @@
 
 | Name                                    | Value                            | Used by                         | Required |
 |-----------------------------------------|----------------------------------|---------------------------------|----------|
-| CDP_BACKUP_DEMO_API_KEY                 | API key                          | Backup demo serverless function | Yes      |
+| CDP_BACKUP_DEMO_API_KEY                 | SHA-512 hash of API key          | Backup demo serverless function | Yes      |
 | CDP_BACKUP_DEMO_BLOB_AES_KEY            | AES 256 key                      | Backup demo serverless function | Yes      |
 | CDP_BACKUP_DEMO_BLOB_AES_IV             | AES 256 iv                       | Backup demo serverless function | Yes      |
 | CDP_BACKUP_DEMO_AWS_KEY                 | AWS S3 key                       | Backup demo serverless function | No *     |

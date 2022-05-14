@@ -1,3 +1,6 @@
+using System;
+using System.Security.Cryptography;
+using System.Text;
 using CloudDataProtection.Core.Environment;
 using Microsoft.AspNetCore.Http;
 
@@ -18,7 +21,14 @@ namespace CloudDataProtection.Functions.BackupDemo.Authentication
                 return false;
             }
 
-            return ApiKey == token;
+            using (SHA512 sha = SHA512.Create())
+            {
+                byte[] hashedInput = sha.ComputeHash(Encoding.UTF8.GetBytes(token));
+
+                string hashedInputString = Convert.ToBase64String(hashedInput);
+
+                return ApiKey == hashedInputString;
+            }
         }
     }
 }
