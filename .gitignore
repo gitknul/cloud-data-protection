@@ -354,3 +354,4 @@ MigrationBackup/
 # Local run configuration
 *.local.run.xml
 
+.DS_Store
