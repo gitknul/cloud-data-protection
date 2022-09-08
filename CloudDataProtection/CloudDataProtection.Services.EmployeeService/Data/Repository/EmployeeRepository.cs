@@ -6,6 +6,7 @@ using CloudDataProtection.Core.Result;
 using CloudDataProtection.Linq.Extensions;
 using CloudDataProtection.Services.EmployeeService.Data.Context;
 using CloudDataProtection.Services.EmployeeService.Entities;
+using EFCoreSecondLevelCacheInterceptor;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudDataProtection.Services.EmployeeService.Data.Repository
@@ -13,15 +14,24 @@ namespace CloudDataProtection.Services.EmployeeService.Data.Repository
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly IEmployeeDbContext _context;
+        private readonly IEFCacheServiceProvider _cacheServiceProvider;
 
         public EmployeeRepository(IEmployeeDbContext context)
         {
             _context = context;
         }
+        
+        public EmployeeRepository(IEmployeeDbContext context, IEFCacheServiceProvider cacheServiceProvider)
+        {
+            _context = context;
+            _cacheServiceProvider = cacheServiceProvider;
+        }
 
         public async Task<Employee> Get(long id)
         {
-            return await _context.Employees.FirstOrDefaultAsync(p => p.Id == id);
+            return _context.Employees
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
         }
 
         public async Task Create(Employee entity)
@@ -29,12 +39,14 @@ namespace CloudDataProtection.Services.EmployeeService.Data.Repository
             _context.Employees.Add(entity);
 
             await _context.SaveAsync();
+
+            _cacheServiceProvider?.ClearAllCachedEntries();
         }
 
         public async Task<PaginatedQueryResult<Employee>> GetAll(int skip, int take, string orderBy, string searchQuery)
         {
             IEnumerable<Employee> enumerable = string.IsNullOrEmpty(searchQuery)
-                ? _context.Employees.AsQueryable()
+                ? _context.Employees.Cacheable().AsQueryable()
                 : await CreateFilteredQuery(searchQuery);
 
             int count = enumerable.Count();
@@ -53,7 +65,8 @@ namespace CloudDataProtection.Services.EmployeeService.Data.Repository
         
         async Task<IEnumerable<Employee>> CreateFilteredQuery(string searchQuery)
         {
-            return (await _context.Employees.AsNoTracking().ToListAsync())
+            return _context.Employees
+                .AsNoTracking().ToList()
                 .Where(e =>
                     e.FirstName == searchQuery || e.FirstName.ContainsIgnoreCase(searchQuery) ||
                     e.LastName == searchQuery || e.LastName.ContainsIgnoreCase(searchQuery) ||
@@ -65,8 +78,9 @@ namespace CloudDataProtection.Services.EmployeeService.Data.Repository
 
         public async Task<Employee> FindByUserEmailAddress(string email)
         {
-            return await _context.Employees
-                .FirstOrDefaultAsync(e => e.UserEmailAddress == email);
+            return _context.Employees
+                .Where(e => e.UserEmailAddress == email)
+                .FirstOrDefault();
         }
     }
 }

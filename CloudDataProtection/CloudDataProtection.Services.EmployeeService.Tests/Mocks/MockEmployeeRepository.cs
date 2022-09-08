@@ -12,6 +12,11 @@ namespace CloudDataProtection.Services.EmployeeService.Tests.Mocks
 {
     public class MockEmployeeRepository : MockCrudRepositoryBase<Employee>, IEmployeeRepository
     {
+        public Task Create(Employee entity, bool canClearCache)
+        {
+            return base.Create(entity);
+        }
+
         public Task<PaginatedQueryResult<Employee>> GetAll(int skip, int take, string orderBy, string searchQuery)
         {
             IEnumerable<Employee> enumerable = _data

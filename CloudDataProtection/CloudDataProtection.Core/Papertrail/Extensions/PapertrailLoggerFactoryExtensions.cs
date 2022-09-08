@@ -13,8 +13,11 @@ namespace CloudDataProtection.Core.Papertrail.Extensions
         private const string UrlKey = "CDP_PAPERTRAIL_URL";
         private const string TokenKey = "CDP_PAPERTRAIL_ACCESS_TOKEN";
         
+        [Obsolete]
         public static ILoggingBuilder AddPapertrail(this ILoggingBuilder builder)
         {
+            return builder.AddDebug().AddConsole();
+            
             builder.AddConfiguration();
 
             string url = EnvironmentVariableHelper.GetEnvironmentVariable(UrlKey);

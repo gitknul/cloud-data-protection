@@ -40,6 +40,17 @@ namespace CloudDataProtection.Core.DependencyInjection.Extensions
             services.AddDbContext<TService, TImplementation>(optionsAction);
         }
 
+        public static void AddEncryptedDbContext<TService, TImplementation>(this IServiceCollection services, IConfiguration configuration, Action<IServiceProvider, DbContextOptionsBuilder> optionsAction = null) 
+            where TService : class 
+            where TImplementation : DbContext, TService
+        {
+            services.Configure<AesOptions>(options => configuration.GetSection("Persistence").Bind(options));
+            
+            services.AddScoped<ITransformer, AesTransformer>();
+
+            services.AddDbContext<TService, TImplementation>(optionsAction);
+        }
+
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             JwtSecretOptions options = new JwtSecretOptions();

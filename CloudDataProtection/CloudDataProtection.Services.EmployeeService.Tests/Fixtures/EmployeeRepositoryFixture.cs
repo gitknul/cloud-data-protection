@@ -7,6 +7,7 @@ using CloudDataProtection.Services.EmployeeService.Data.Context;
 using CloudDataProtection.Services.EmployeeService.Data.Repository;
 using CloudDataProtection.Services.EmployeeService.Entities;
 using CloudDataProtection.Services.EmployeeService.Tests.Context;
+using CloudDataProtection.Services.EmployeeService.Tests.Mocks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Xunit.Abstractions;
@@ -33,7 +34,7 @@ namespace CloudDataProtection.Services.EmployeeService.Tests.Fixtures
         {
             _context = CreateDbContext(databaseName);
 
-            return new EmployeeRepository(_context);
+            return new EmployeeRepository(_context, new NullEFCacheServiceProvider());
         }
 
         public async Task Initialize() => await Initialize(0);

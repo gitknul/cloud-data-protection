@@ -20,21 +20,26 @@ namespace CloudDataProtection.Migrations
         /// </summary>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            if (true)
+            {
+                return;
+            }
+            
             string environment = EnvironmentVariableHelper.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
+            
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile($"appsettings.{environment}.json")
                 .Build();
-
+            
             AesOptions options = new AesOptions();
             
             configuration.GetSection("Persistence").Bind(options);
             
             ITransformer transformer = new AesTransformer(Options.Create(options));
-
+            
             DbContextOptionsBuilder builder = new DbContextOptionsBuilder();
-
+            
             builder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             
             using (AuthenticationDbContext context = new AuthenticationDbContext(builder.Options, transformer))
@@ -45,7 +50,7 @@ namespace CloudDataProtection.Migrations
                 {
                     context.Entry(u).State = EntityState.Modified;
                 });
-
+            
                 context.SaveChanges();
             }
         }

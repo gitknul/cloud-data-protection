@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Running;
 using CloudDataProtection.Benchmarks.EmployeeService;
+using CloudDataProtection.Benchmarks.EmployeeService.Fixture;
 
 namespace CloudDataProtection.Benchmarks
 {
@@ -7,9 +8,8 @@ namespace CloudDataProtection.Benchmarks
     {
         static void Main(string[] args)
         {
-            BenchmarkRunner.Run<EmployeeRepositoryBenchmark1000>();
-            BenchmarkRunner.Run<EmployeeRepositoryBenchmark10000>();
-            BenchmarkRunner.Run<EmployeeRepositoryBenchmark100000>();
+            BenchmarkRunner.Run<EmployeeRepositoryBenchmark10000<EmployeeRepositoryBenchmarkFixture>>();
+            BenchmarkRunner.Run<EmployeeRepositoryBenchmark10000<CacheEmployeeRepositoryBenchmarkFixture>>();
         }
     }
 }

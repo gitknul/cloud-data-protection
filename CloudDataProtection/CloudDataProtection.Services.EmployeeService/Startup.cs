@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using CloudDataProtection.Core.DependencyInjection.Extensions;
 using CloudDataProtection.Core.Jwt.Options;
@@ -8,6 +9,8 @@ using CloudDataProtection.Services.EmployeeService.Controllers.Dto.Output;
 using CloudDataProtection.Services.EmployeeService.Data.Context;
 using CloudDataProtection.Services.EmployeeService.Data.Repository;
 using CloudDataProtection.Services.EmployeeService.Entities;
+using EasyCaching.Core.Configurations;
+using EFCoreSecondLevelCacheInterceptor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +24,8 @@ namespace CloudDataProtection.Services.EmployeeService
     public class Startup
     {
         private static readonly string CorsPolicy = "cors-policy";
+        private static readonly string CacheProvider = "redis";
+        private static readonly string SerializerName = "json";
 
         public Startup(IConfiguration configuration)
         {
@@ -61,9 +66,31 @@ namespace CloudDataProtection.Services.EmployeeService
             services.AddScoped<EmployeeBusinessLogic>();
             
             services.AddAutoMapper(ConfigureMapper);
-            
-            services.AddEncryptedDbContext<IEmployeeDbContext, EmployeeDbContext>(Configuration, 
-                o => o.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddEncryptedDbContext<IEmployeeDbContext, EmployeeDbContext>(Configuration,
+                (provider, builder) =>
+                    {
+                        builder.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
+                               .AddInterceptors(provider.GetRequiredService<SecondLevelCacheInterceptor>());
+                    });
+
+            services.AddEFSecondLevelCache(options =>
+            {
+                options.UseEasyCachingCoreProvider(CacheProvider).DisableLogging(false).UseCacheKeyPrefix("EF_");
+                options.CacheAllQueriesExceptContainingTableNames(CacheExpirationMode.Sliding, TimeSpan.FromMinutes(5) ,"__EFMigrationsHistory");
+            });
+
+            services.AddEasyCaching(options =>
+            {
+                options.WithJson(SerializerName);
+                options.UseRedis(config =>
+                {
+                    config.DBConfig.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
+                    config.SerializerName = SerializerName;
+                    config.EnableLogging = true;
+                    config.DBConfig.AllowAdmin = true;
+                }, CacheProvider);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
