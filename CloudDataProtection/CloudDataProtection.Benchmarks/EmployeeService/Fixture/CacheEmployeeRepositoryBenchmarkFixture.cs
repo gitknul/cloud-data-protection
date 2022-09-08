@@ -6,12 +6,17 @@ using CloudDataProtection.Core.Cryptography.Aes.Options;
 using CloudDataProtection.Services.EmployeeService.Data.Context;
 using CloudDataProtection.Services.EmployeeService.Data.Repository;
 using CloudDataProtection.Services.EmployeeService.Entities;
+using EasyCaching.Core.Configurations;
+using EFCoreSecondLevelCacheInterceptor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace CloudDataProtection.Benchmarks.EmployeeService.Fixture
 {
-    public class EmployeeRepositoryBenchmarkFixture : IEmployeeRepositoryBenchmarkFixture
+    public class CacheEmployeeRepositoryBenchmarkFixture : IEmployeeRepositoryBenchmarkFixture
     {
         private const string ConnectionStringTemplate =
             @"Host=localhost;Port=5433;Database=employeedb_benchmark_{PLACEHOLDER};Username=postgres;Password=postgresCI";
@@ -24,13 +29,28 @@ namespace CloudDataProtection.Benchmarks.EmployeeService.Fixture
         private static readonly string[] FirstNames = { "John", "James", "Peter", "David", "Thomas", "Mark" };
         private static readonly string[] LastNames = { "Johnson", "May", "Smith", "Jones", "Miller", "Davies" };
 
+        private static readonly string CacheProvider = "redis";
+
+        private IServiceProvider _serviceProvider;
         private IEmployeeDbContext _context;
+        private IEFCacheServiceProvider _cacheServiceProvider;
+
+        public CacheEmployeeRepositoryBenchmarkFixture()
+        {
+            _serviceProvider = BuildServiceProvider();
+        }
 
         public void Seed(string databaseName, int rowCount)
         {
             _context = CreateDbContext(databaseName);
+
+            _cacheServiceProvider = _serviceProvider.GetRequiredService<IEFCacheServiceProvider>();
             
-            var repository = new EmployeeRepository(_context);
+            Console.WriteLine($"{LogTime} | Flushing cache...");
+            
+            _cacheServiceProvider.ClearAllCachedEntries();
+            
+            var repository = new EmployeeRepository(_context, _cacheServiceProvider);
             
             Console.WriteLine($"{LogTime} | Deleting database...");
 
@@ -46,9 +66,11 @@ namespace CloudDataProtection.Benchmarks.EmployeeService.Fixture
 
             Console.WriteLine($"{LogTime} | Seeding database with {rowCount.ToString()} rows...");
 
-            _context.Employees.AddRange(Enumerable.Range(0, 10000).Select(CreateMockEmployee).ToList());
-            
+            _context.Employees.AddRange(Enumerable.Range(0, rowCount).Select(CreateMockEmployee).ToList());
+
             _context.SaveAsync().Wait();
+            
+            _cacheServiceProvider.ClearAllCachedEntries();
             
             Console.WriteLine($"{LogTime} | Database seeded...");
         }
@@ -57,7 +79,7 @@ namespace CloudDataProtection.Benchmarks.EmployeeService.Fixture
         {
             DisposeContext();
 
-            return new EmployeeRepository(CreateDbContext(databaseName));
+            return new EmployeeRepository(CreateDbContext(databaseName), _serviceProvider.GetRequiredService<IEFCacheServiceProvider>());
         }
 
         public void TearDown()
@@ -75,10 +97,40 @@ namespace CloudDataProtection.Benchmarks.EmployeeService.Fixture
 
             string connectionString = ConnectionStringTemplate.Replace("{PLACEHOLDER}", databaseName);
 
+            DbCommandInterceptor interceptor = _serviceProvider.GetRequiredService<SecondLevelCacheInterceptor>();
+
             DbContextOptions<EmployeeDbContext> dbContextOptions = new DbContextOptionsBuilder<EmployeeDbContext>()
-                .UseNpgsql(connectionString).Options;
+                .UseNpgsql(connectionString)
+                .AddInterceptors(interceptor).Options;
 
             return new TestEmployeeDbContext(dbContextOptions, new AesTransformer(options));
+        }
+
+        private IServiceProvider BuildServiceProvider()
+        {
+            var services = new ServiceCollection();
+
+            services.AddLogging(builder => builder.ClearProviders());
+
+            services.AddEFSecondLevelCache(options =>
+            {
+                options.UseEasyCachingCoreProvider(CacheProvider).DisableLogging(true).UseCacheKeyPrefix("CI_EF_");
+                options.CacheAllQueriesExceptContainingTableNames(CacheExpirationMode.Sliding, TimeSpan.FromHours(1), "__EFMigrationsHistory");
+            });
+
+            services.AddEasyCaching(options =>
+            {
+                options.WithJson("json");
+                options.UseRedis(config =>
+                {
+                    config.DBConfig.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
+                    config.DBConfig.AllowAdmin = true;
+                    config.SerializerName = "json";
+                    config.EnableLogging = false;
+                }, CacheProvider);
+            });
+
+            return services.BuildServiceProvider();
         }
 
         private static Employee CreateMockEmployee(int row)

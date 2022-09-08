@@ -30,6 +30,11 @@ services:
     ports: 
       - "1025:1025"
       - "8025:8025"
+    
+  cdp_redis:
+    image: "redis:7.0.4-alpine3.16"
+    ports:
+      - "6379:6379"
 
 volumes:
   cdp_rabbitmq:
